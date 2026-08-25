@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#071018"
+    >
+
+    <meta
+        name="description"
+        content="تطبيق الكود الوسيط لتحويل الأموال"
+    >
+
+    <title>تطبيق الكود الوسيط</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- ==============================
+         رأس الموقع
+    =============================== -->
+
+    <header class="header">
+
+        <div class="brand">
+
+            <h1>
+                تطبيق الكود الوسيط
+            </h1>
+
+            <p>
+                صدقة جارية عن روح شهداء عائلة فرج الله
+            </p>
+
+            <p class="charity-text">
+                صنع بواسطة أحمد عامر فرج الله
+            </p>
+
+        </div>
+
+
+        <button
+            id="themeButton"
+            class="theme-button"
+            type="button"
+            aria-label="تغيير الوضع"
+        >
+            🌙
+        </button>
+
+    </header>
+
+
+    <!-- ==============================
+         المحتوى الرئيسي
+    =============================== -->
+
+    <main class="container">
+
+
+        <!-- ==============================
+             جهات التحويل
+        =============================== -->
+
+        <section class="card">
+
+            <h2>
+                اختر جهة التحويل
+            </h2>
+
+
+            <div class="services">
+
+
+                <!-- جوال بي -->
+
+                <button
+                    class="service"
+                    data-service="jawwal"
+                    type="button"
+                >
+
+                    <img
+                        src="jawwal-pay.png"
+                        alt="جوال بي"
+                        class="service-logo"
+                    >
+
+                    <span>
+                        جوال بي
+                    </span>
+
+                </button>
+
+
+                <!-- بال بي -->
+
+                <button
+                    class="service"
+                    data-service="palpay"
+                    type="button"
+                >
+
+                    <img
+                        src="palpay.png"
+                        alt="بال بي"
+                        class="service-logo"
+                    >
+
+                    <span>
+                        بال بي
+                    </span>
+
+                </button>
+
+
+                <!-- بنك فلسطين -->
+
+                <button
+                    class="service"
+                    data-service="bank"
+                    type="button"
+                >
+
+                    <img
+                        src="bank-palestine.png"
+                        alt="بنك فلسطين"
+                        class="service-logo"
+                    >
+
+                    <span>
+                        بنك فلسطين
+                    </span>
+
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             طريقة الدفع
+        =============================== -->
+
+        <section class="card payment-card">
+
+            <h2>
+                اختر طريقة الدفع
+            </h2>
+
+
+            <div class="payment-types">
+
+
+                <button
+                    class="payment-type"
+                    data-type="friend"
+                    type="button"
+                >
+
+                    👤 الدفع لصديق
+
+                </button>
+
+
+                <button
+                    class="payment-type"
+                    data-type="merchant"
+                    type="button"
+                >
+
+                    🏪 الدفع لتاجر
+
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             بيانات التحويل
+        =============================== -->
+
+        <section class="card">
+
+            <h2>
+                بيانات التحويل
+            </h2>
+
+
+            <div class="input-group">
+
+                <label for="receiver">
+                    رقم المستلم
+                </label>
+
+
+                <input
+                    id="receiver"
+                    type="tel"
+                    inputmode="numeric"
+                    autocomplete="tel"
+                    placeholder="أدخل رقم المستلم"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="amount">
+
+                    المبلغ
+
+                    <span>
+                        (بالشيكل)
+                    </span>
+
+                </label>
+
+
+                <input
+                    id="amount"
+                    type="number"
+                    inputmode="decimal"
+                    min="0"
+                    step="0.01"
+                    placeholder="أدخل المبلغ بالشيكل"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="notes">
+
+                    ملاحظات
+
+                    <span>
+                        (اختياري)
+                    </span>
+
+                </label>
+
+
+                <textarea
+                    id="notes"
+                    placeholder="أضف ملاحظة إن وجدت..."
+                ></textarea>
+
+            </div>
+
+
+            <button
+                id="createButton"
+                class="create-button"
+                type="button"
+            >
+
+                إنشاء الكود وإكمال العملية
+
+            </button>
+
+        </section>
+
+
+        <!-- ==============================
+             نتيجة العملية
+        =============================== -->
+
+        <section
+            id="resultSection"
+            class="card result hidden"
+        >
+
+            <h2>
+                تأكيد العملية
+            </h2>
+
+
+            <p id="resultMessage">
+                الكود جاهز للتنفيذ
+            </p>
+
+
+            <div
+                id="ussdCode"
+                class="ussd-code"
+            >
+                -
+            </div>
+
+
+            <div class="result-buttons">
+
+                <a
+                    id="callButton"
+                    class="call-button"
+                    href="#"
+                >
+
+                    ✓ تأكيد الاتصال
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             سجل الحركات
+             قائمة واحدة
+        =============================== -->
+
+        <section class="card history-card">
+
+
+            <button
+                id="historyToggle"
+                class="history-main-toggle"
+                type="button"
+                aria-expanded="false"
+            >
+
+                <span class="history-main-title">
+
+                    <span class="history-main-icon">
+                        📋
+                    </span>
+
+                    <span>
+                        سجل الحركات
+                    </span>
+
+                </span>
+
+
+                <span
+                    id="historyArrow"
+                    class="history-main-arrow"
+                >
+                    ‹
+                </span>
+
+            </button>
+
+
+            <!-- محتوى القائمة -->
+
+            <div
+                id="historyPanel"
+                class="history-panel"
+            >
+
+
+                <div class="history-panel-header">
+
+                    <span>
+                        جميع الحركات
+                    </span>
+
+
+                    <button
+                        id="clearHistoryButton"
+                        type="button"
+                    >
+
+                        مسح السجل
+
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="historyContainer"
+                    class="history-container"
+                >
+
+                    <div class="empty-history">
+
+                        لا توجد عمليات حتى الآن
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             توقيع المطور
+        =============================== -->
+
+        <div class="developer-card">
+
+            <div class="developer-line"></div>
+
+
+            <div class="developer-icon">
+                ✦
+            </div>
+
+
+            <div class="developer-title">
+
+                صنع بواسطة أحمد عامر فرج الله
+
+            </div>
+
+
+            <div class="developer-subtitle">
+
+                تطوير لفكرة أ. بكر السنكري
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+    <!-- ==============================
+         التذييل
+    =============================== -->
+
+    <footer>
+
+        تطبيق الكود الوسيط
+
+    </footer>
+
+
+    <!-- ==============================
+         نافذة تأكيد الاتصال
+    =============================== -->
+
+    <div
+        id="confirmModal"
+        class="confirm-modal hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirmTitle"
+    >
+
+
+        <div class="confirm-overlay"></div>
+
+
+        <div class="confirm-box">
+
+
+            <div class="confirm-icon">
+                ✓
+            </div>
+
+
+            <h2 id="confirmTitle">
+
+                تأكيد الاتصال
+
+            </h2>
+
+
+            <p class="confirm-text">
+
+                يرجى التأكد من بيانات العملية قبل الاتصال
+
+            </p>
+
+
+            <div class="confirm-details">
+
+
+                <div class="confirm-row">
+
+                    <span>
+                        جهة التحويل
+                    </span>
+
+                    <strong id="confirmService">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="confirm-row">
+
+                    <span>
+                        طريقة الدفع
+                    </span>
+
+                    <strong id="confirmPayment">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="confirm-row">
+
+                    <span>
+                        رقم المستلم
+                    </span>
+
+                    <strong id="confirmReceiver">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="confirm-row">
+
+                    <span>
+                        المبلغ
+                    </span>
+
+                    <strong id="confirmAmount">
+                        -
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="confirm-buttons">
+
+
+                <button
+                    id="confirmCallButton"
+                    class="confirm-yes"
+                    type="button"
+                >
+
+                    ✓ نعم، تأكيد الاتصال
+
+                </button>
+
+
+                <button
+                    id="cancelCallButton"
+                    class="confirm-no"
+                    type="button"
+                >
+
+                    إلغاء
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- JavaScript -->
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
