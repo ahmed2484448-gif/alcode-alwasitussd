@@ -1,27 +1,21 @@
 {
-  "name": "تطبيق الكود الوسيط",
-  "short_name": "الكود الوسيط",
-  "description": "صدقة جارية عن روح شهداء عائلة فرج الله",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#050b12",
-  "theme_color": "#050b12",
-  "dir": "rtl",
-  "lang": "ar",
-  "icons": [
-    {
-      "src": "./icon.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./icon.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ]
+    "name": "تطبيق الكود الوسيط",
+    "short_name": "الكود الوسيط",
+    "description": "تطبيق الكود الوسيط للدفع والتحويل",
+    "lang": "ar",
+    "dir": "rtl",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#06111a",
+    "theme_color": "#06111a",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
 }
