@@ -3,17 +3,25 @@
   "short_name": "الكود الوسيط",
   "description": "صدقة جارية عن روح شهداء عائلة فرج الله",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#050b12",
   "theme_color": "#050b12",
   "dir": "rtl",
   "lang": "ar",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "./icon.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "./icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
