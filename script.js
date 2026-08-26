@@ -1,20 +1,42 @@
-/* ==========================================
+/* =========================================
    تطبيق الكود الوسيط
-========================================== */
+   script.js
+========================================= */
+
+let selectedService = "";
+let selectedPayment = "";
+
+let currentUSSD = "";
+let pendingCallHref = "";
+
+const HISTORY_KEY = "alkod_alwasit_history";
 
 
-/* ==========================================
-   عناصر الصفحة
-========================================== */
+/* =========================================
+   أسماء الخدمات
+========================================= */
+
+const serviceNames = {
+    jawwal: "جوال بي",
+    palpay: "بال بي",
+    bank: "بنك فلسطين"
+};
+
+const paymentNames = {
+    friend: "الدفع لصديق",
+    merchant: "الدفع لتاجر"
+};
+
+
+/* =========================================
+   العناصر
+========================================= */
 
 const serviceButtons =
     document.querySelectorAll(".service");
 
 const paymentButtons =
     document.querySelectorAll(".payment-type");
-
-const paymentCard =
-    document.getElementById("paymentCard");
 
 const receiverGroup =
     document.getElementById("receiverGroup");
@@ -40,14 +62,23 @@ const createButton =
 const resultSection =
     document.getElementById("resultSection");
 
-const ussdCode =
-    document.getElementById("ussdCode");
-
 const resultMessage =
     document.getElementById("resultMessage");
 
+const ussdCode =
+    document.getElementById("ussdCode");
+
 const callButton =
     document.getElementById("callButton");
+
+const historyToggle =
+    document.getElementById("historyToggle");
+
+const historyPanel =
+    document.getElementById("historyPanel");
+
+const historyCard =
+    document.querySelector(".history-card");
 
 const historyContainer =
     document.getElementById("historyContainer");
@@ -58,19 +89,14 @@ const clearHistoryButton =
 const themeButton =
     document.getElementById("themeButton");
 
-const historyToggle =
-    document.getElementById("historyToggle");
-
-const historyCard =
-    document.querySelector(".history-card");
-
-
-/* ==========================================
-   نافذة التأكيد
-========================================== */
-
 const confirmModal =
     document.getElementById("confirmModal");
+
+const confirmCallButton =
+    document.getElementById("confirmCallButton");
+
+const cancelCallButton =
+    document.getElementById("cancelCallButton");
 
 const confirmService =
     document.getElementById("confirmService");
@@ -93,669 +119,688 @@ const confirmReceiverRow =
 const confirmAmountRow =
     document.getElementById("confirmAmountRow");
 
-const confirmCallButton =
-    document.getElementById("confirmCallButton");
 
-const cancelCallButton =
-    document.getElementById("cancelCallButton");
+/* =========================================
+   إنشاء حقل الرقم السري لجوال بي
+========================================= */
 
+const passwordGroup =
+    document.createElement("div");
 
-/* ==========================================
-   المتغيرات
-========================================== */
+passwordGroup.id =
+    "passwordGroup";
 
-let selectedService = null;
+passwordGroup.className =
+    "input-group hidden";
 
-let selectedPaymentType = null;
+passwordGroup.innerHTML = `
+    <label for="password">
+        الرقم السري
+    </label>
 
-let currentUssdCode = "";
+    <input
+        id="password"
+        type="password"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="أدخل الرقم السري"
+    >
+`;
 
+if (receiverGroup) {
+    receiverGroup.parentNode.insertBefore(
+        passwordGroup,
+        receiverGroup
+    );
+}
 
-/* ==========================================
-   أسماء الخدمات
-========================================== */
-
-const serviceNames = {
-
-    jawwal: "جوال بي",
-
-    palpay: "بال بي",
-
-    bank: "بنك فلسطين"
-
-};
-
-
-/* ==========================================
-   أسماء طرق الدفع
-========================================== */
-
-const paymentNames = {
-
-    friend: "الدفع لصديق",
-
-    merchant: "الدفع لتاجر"
-
-};
+const passwordInput =
+    document.getElementById("password");
 
 
-/* ==========================================
+/* =========================================
+   إخفاء/إظهار
+========================================= */
+
+function showElement(element) {
+    if (element) {
+        element.classList.remove("hidden");
+    }
+}
+
+function hideElement(element) {
+    if (element) {
+        element.classList.add("hidden");
+    }
+}
+
+
+/* =========================================
    اختيار جهة التحويل
-========================================== */
+========================================= */
 
 serviceButtons.forEach(button => {
 
     button.addEventListener("click", () => {
 
         serviceButtons.forEach(item => {
-
             item.classList.remove("active");
-
         });
 
         button.classList.add("active");
 
         selectedService =
-            button.dataset.service;
+            button.dataset.service || "";
 
-        selectedPaymentType = null;
-
-        paymentButtons.forEach(item => {
-
-            item.classList.remove("active");
-
-        });
-
-        resultSection.classList.add("hidden");
-
-
-        /* ==================================
-           بنك فلسطين
-        ================================== */
-
-        if (selectedService === "bank") {
-
-            /*
-             * إخفاء كل البيانات التي لا يحتاجها
-             * بنك فلسطين
-             */
-
-            paymentCard.classList.add(
-                "hidden"
-            );
-
-            receiverGroup.classList.add(
-                "hidden"
-            );
-
-            amountGroup.classList.add(
-                "hidden"
-            );
-
-            notesGroup.classList.add(
-                "hidden"
-            );
-
-
-            createButton.textContent =
-                "متابعة التحويل عبر بنك فلسطين";
-
-
-            return;
-        }
-
-
-        /* ==================================
-           جوال بي / بال بي
-        ================================== */
-
-        paymentCard.classList.remove(
-            "hidden"
-        );
-
-        receiverGroup.classList.remove(
-            "hidden"
-        );
-
-        amountGroup.classList.remove(
-            "hidden"
-        );
-
-        notesGroup.classList.remove(
-            "hidden"
-        );
-
-        createButton.textContent =
-            "إنشاء الكود وإكمال العملية";
+        updateServiceFields();
 
     });
 
 });
 
 
-/* ==========================================
-   اختيار طريقة الدفع
-========================================== */
+/* =========================================
+   اختيار نوع الدفع
+========================================= */
 
 paymentButtons.forEach(button => {
 
     button.addEventListener("click", () => {
 
         paymentButtons.forEach(item => {
-
-            item.classList.remove(
-                "active"
-            );
-
+            item.classList.remove("active");
         });
 
-        button.classList.add(
-            "active"
-        );
+        button.classList.add("active");
 
-        selectedPaymentType =
-            button.dataset.type;
+        selectedPayment =
+            button.dataset.type || "";
+
+        updateServiceFields();
 
     });
 
 });
 
 
-/* ==========================================
-   إنشاء العملية
-========================================== */
+/* =========================================
+   تحديث الحقول حسب الخدمة
+========================================= */
 
-createButton.addEventListener(
-    "click",
-    () => {
+function updateServiceFields() {
 
+    /*
+       الرقم السري يظهر فقط مع جوال بي
+    */
 
-        /* لا توجد جهة */
+    if (selectedService === "jawwal") {
 
-        if (!selectedService) {
+        showElement(passwordGroup);
 
-            alert(
-                "يرجى اختيار جهة التحويل أولاً."
-            );
+    } else {
 
-            return;
+        hideElement(passwordGroup);
 
+        if (passwordInput) {
+            passwordInput.value = "";
         }
-
-
-        /* ==================================
-           بنك فلسطين
-        ================================== */
-
-        if (selectedService === "bank") {
-
-            currentUssdCode =
-                "*267#";
-
-
-            showResult(
-                "*267#",
-                "كود بنك فلسطين جاهز للاتصال المباشر."
-            );
-
-
-            saveHistory({
-
-                service:
-                    "بنك فلسطين",
-
-                payment:
-                    "تحويل مباشر",
-
-                receiver:
-                    "-",
-
-                amount:
-                    "-",
-
-                notes:
-                    "-",
-
-                code:
-                    "*267#"
-
-            });
-
-
-            return;
-        }
-
-
-        /* ==================================
-           جوال / بال بي
-        ================================== */
-
-        if (!selectedPaymentType) {
-
-            alert(
-                "يرجى اختيار طريقة الدفع."
-            );
-
-            return;
-
-        }
-
-
-        const receiver =
-            receiverInput.value.trim();
-
-        const amount =
-            amountInput.value.trim();
-
-        const notes =
-            notesInput.value.trim();
-
-
-        /* رقم المستلم */
-
-        if (!receiver) {
-
-            alert(
-                "يرجى إدخال رقم المستلم."
-            );
-
-            receiverInput.focus();
-
-            return;
-
-        }
-
-
-        const cleanReceiver =
-            receiver.replace(
-                /\s/g,
-                ""
-            );
-
-
-        if (
-            !/^\d+$/.test(
-                cleanReceiver
-            )
-        ) {
-
-            alert(
-                "رقم المستلم يجب أن يحتوي على أرقام فقط."
-            );
-
-            receiverInput.focus();
-
-            return;
-
-        }
-
-
-        /* المبلغ */
-
-        if (!amount) {
-
-            alert(
-                "يرجى إدخال المبلغ."
-            );
-
-            amountInput.focus();
-
-            return;
-
-        }
-
-
-        const numericAmount =
-            Number(amount);
-
-
-        if (
-            !Number.isFinite(
-                numericAmount
-            ) ||
-            numericAmount <= 0
-        ) {
-
-            alert(
-                "يرجى إدخال مبلغ صحيح."
-            );
-
-            amountInput.focus();
-
-            return;
-
-        }
-
-
-        /* ==================================
-           إنشاء USSD
-        ================================== */
-
-        let code = "";
-
-
-        /* جوال بي */
-
-        if (selectedService === "jawwal") {
-
-            if (
-                selectedPaymentType ===
-                "friend"
-            ) {
-
-                code =
-                    `*110*1*${cleanReceiver}*${numericAmount}#`;
-
-            } else {
-
-                code =
-                    `*110*2*${cleanReceiver}*${numericAmount}#`;
-
-            }
-
-        }
-
-
-        /* بال بي */
-
-        if (selectedService === "palpay") {
-
-            if (
-                selectedPaymentType ===
-                "friend"
-            ) {
-
-                code =
-                    `*370*1*1*${cleanReceiver}*${numericAmount}#`;
-
-            } else {
-
-                code =
-                    `*370*1*2*${cleanReceiver}*${numericAmount}#`;
-
-            }
-
-        }
-
-
-        if (!code) {
-
-            alert(
-                "تعذر إنشاء الكود."
-            );
-
-            return;
-
-        }
-
-
-        currentUssdCode =
-            code;
-
-
-        showResult(
-            code,
-            `كود ${serviceNames[selectedService]} جاهز للتنفيذ.`
-        );
-
-
-        saveHistory({
-
-            service:
-                serviceNames[selectedService],
-
-            payment:
-                paymentNames[selectedPaymentType],
-
-            receiver:
-                cleanReceiver,
-
-            amount:
-                numericAmount,
-
-            notes:
-                notes || "-",
-
-            code:
-                code
-
-        });
-
     }
-);
 
 
-/* ==========================================
-   عرض النتيجة
-========================================== */
+    /*
+       بنك فلسطين:
+       مباشر بدون رقم المستلم والمبلغ والملاحظات
+    */
 
-function showResult(
-    code,
-    message
-) {
+    if (selectedService === "bank") {
 
-    ussdCode.textContent =
-        code;
+        hideElement(receiverGroup);
+        hideElement(amountGroup);
+        hideElement(notesGroup);
 
-    resultMessage.textContent =
-        message;
+        /*
+           لا يوجد دفع لصديق/تاجر لبنك فلسطين
+           إذا كان ظاهرًا يتم إلغاء الاختيار بصريًا
+        */
 
-    resultSection.classList.remove(
-        "hidden"
-    );
-
-
-    setTimeout(() => {
-
-        resultSection.scrollIntoView({
-
-            behavior:
-                "smooth",
-
-            block:
-                "center"
-
+        paymentButtons.forEach(button => {
+            button.classList.remove("active");
         });
 
-    }, 100);
+        selectedPayment = "";
+
+    } else {
+
+        showElement(receiverGroup);
+        showElement(amountGroup);
+        showElement(notesGroup);
+    }
 
 }
 
 
-/* ==========================================
-   فتح سجل الحركات
-========================================== */
+/* =========================================
+   تنظيف الرقم
+========================================= */
 
-historyToggle.addEventListener(
-    "click",
-    () => {
+function cleanNumber(value) {
 
-        const isOpen =
-            historyCard.classList.contains(
-                "open"
-            );
+    return String(value || "")
+        .trim()
+        .replace(/\s+/g, "");
 
-
-        historyCard.classList.toggle(
-            "open"
-        );
+}
 
 
-        historyToggle.setAttribute(
-            "aria-expanded",
-            String(!isOpen)
+/* =========================================
+   تنظيف المبلغ
+========================================= */
+
+function cleanAmount(value) {
+
+    return String(value || "")
+        .trim()
+        .replace(/,/g, ".");
+
+}
+
+
+/* =========================================
+   بناء كود جوال بي
+========================================= */
+
+function buildJawwalCode() {
+
+    const password =
+        cleanNumber(passwordInput.value);
+
+    const receiver =
+        cleanNumber(receiverInput.value);
+
+    const amount =
+        cleanAmount(amountInput.value);
+
+
+    /*
+       الدفع لصديق
+       *110*1*الرقم السري*رقم المستلم*المبلغ#
+    */
+
+    if (selectedPayment === "friend") {
+
+        return (
+            "*110*1*" +
+            password +
+            "*" +
+            receiver +
+            "*" +
+            amount +
+            "#"
         );
 
     }
-);
 
 
-/* ==========================================
-   فتح نافذة تأكيد الاتصال
-========================================== */
+    /*
+       الدفع لتاجر
+       *110*2*الرقم السري*رقم المستلم*المبلغ#
+    */
 
-callButton.addEventListener(
-    "click",
-    event => {
+    if (selectedPayment === "merchant") {
 
-        event.preventDefault();
+        return (
+            "*110*2*" +
+            password +
+            "*" +
+            receiver +
+            "*" +
+            amount +
+            "#"
+        );
+
+    }
 
 
-        if (!currentUssdCode) {
+    return "";
+
+}
+
+
+/* =========================================
+   بناء كود بال بي
+========================================= */
+
+function buildPalPayCode() {
+
+    const receiver =
+        cleanNumber(receiverInput.value);
+
+    const amount =
+        cleanAmount(amountInput.value);
+
+
+    /*
+       أبقينا كود بال بي منفصلًا
+       حتى لا يتأثر بتعديل جوال بي.
+    */
+
+    return (
+        "*600*" +
+        receiver +
+        "*" +
+        amount +
+        "#"
+    );
+
+}
+
+
+/* =========================================
+   بنك فلسطين
+========================================= */
+
+function buildBankCode() {
+
+    /*
+       التحويل عن طريق بنك فلسطين مباشر.
+       لا نطلب رقم المستلم أو المبلغ أو الملاحظات.
+    */
+
+    return "";
+
+}
+
+
+/* =========================================
+   إنشاء الكود
+========================================= */
+
+function createCode() {
+
+    if (!selectedService) {
+
+        alert("يرجى اختيار جهة التحويل أولاً.");
+
+        return;
+    }
+
+
+    /*
+       بنك فلسطين
+    */
+
+    if (selectedService === "bank") {
+
+        currentUSSD = buildBankCode();
+
+        resultMessage.textContent =
+            "سيتم فتح الاتصال المباشر ببنك فلسطين.";
+
+        ussdCode.textContent =
+            "اتصال مباشر";
+
+        pendingCallHref =
+            "tel:";
+
+        callButton.href =
+            pendingCallHref;
+
+        showElement(resultSection);
+
+        openConfirmation();
+
+        return;
+    }
+
+
+    /*
+       لازم اختيار طريقة الدفع
+    */
+
+    if (!selectedPayment) {
+
+        alert("يرجى اختيار طريقة الدفع.");
+
+        return;
+    }
+
+
+    /*
+       جوال بي يحتاج الرقم السري
+    */
+
+    if (selectedService === "jawwal") {
+
+        const password =
+            cleanNumber(passwordInput.value);
+
+        if (!password) {
+
+            alert("يرجى إدخال الرقم السري.");
+
+            passwordInput.focus();
 
             return;
-
         }
 
+    }
+
+
+    const receiver =
+        cleanNumber(receiverInput.value);
+
+    const amount =
+        cleanAmount(amountInput.value);
+
+
+    if (!receiver) {
+
+        alert("يرجى إدخال رقم المستلم.");
+
+        receiverInput.focus();
+
+        return;
+    }
+
+
+    if (!amount || Number(amount) <= 0) {
+
+        alert("يرجى إدخال مبلغ صحيح.");
+
+        amountInput.focus();
+
+        return;
+    }
+
+
+    /*
+       إنشاء الكود حسب الخدمة
+    */
+
+    if (selectedService === "jawwal") {
+
+        currentUSSD =
+            buildJawwalCode();
+
+    } else if (selectedService === "palpay") {
+
+        currentUSSD =
+            buildPalPayCode();
+
+    } else {
+
+        currentUSSD = "";
+
+    }
+
+
+    if (!currentUSSD) {
+
+        alert("تعذر إنشاء كود العملية.");
+
+        return;
+    }
+
+
+    /*
+       تحويل # إلى %23 داخل رابط tel
+    */
+
+    pendingCallHref =
+        "tel:" +
+        encodeURIComponent(currentUSSD);
+
+
+    ussdCode.textContent =
+        currentUSSD;
+
+    resultMessage.textContent =
+        "تم تجهيز كود العملية. اضغط تأكيد الاتصال.";
+
+    callButton.href =
+        pendingCallHref;
+
+
+    showElement(resultSection);
+
+
+    /*
+       فتح نافذة التأكيد
+    */
+
+    openConfirmation();
+
+}
+
+
+/* =========================================
+   زر إنشاء الكود
+========================================= */
+
+if (createButton) {
+
+    createButton.addEventListener(
+        "click",
+        createCode
+    );
+
+}
+
+
+/* =========================================
+   نافذة تأكيد الاتصال
+========================================= */
+
+function openConfirmation() {
+
+    if (!confirmModal) {
+        return;
+    }
+
+
+    if (confirmService) {
 
         confirmService.textContent =
             serviceNames[selectedService] ||
+            selectedService;
+
+    }
+
+
+    if (confirmPaymentRow) {
+
+        if (selectedPayment) {
+
+            showElement(confirmPaymentRow);
+
+        } else {
+
+            hideElement(confirmPaymentRow);
+
+        }
+
+    }
+
+
+    if (confirmPayment) {
+
+        confirmPayment.textContent =
+            paymentNames[selectedPayment] ||
             "-";
 
-
-        /* بنك فلسطين */
-
-        if (selectedService === "bank") {
-
-            confirmPaymentRow.classList.add(
-                "hidden"
-            );
-
-            confirmReceiverRow.classList.add(
-                "hidden"
-            );
-
-            confirmAmountRow.classList.add(
-                "hidden"
-            );
-
-        }
+    }
 
 
-        /* جوال / بال بي */
-
-        else {
-
-            confirmPaymentRow.classList.remove(
-                "hidden"
-            );
-
-            confirmReceiverRow.classList.remove(
-                "hidden"
-            );
-
-            confirmAmountRow.classList.remove(
-                "hidden"
-            );
-
-
-            confirmPayment.textContent =
-                paymentNames[
-                    selectedPaymentType
-                ] || "-";
-
-
-            confirmReceiver.textContent =
-                receiverInput.value.trim() ||
-                "-";
-
-
-            confirmAmount.textContent =
-                `${amountInput.value} شيكل`;
-
-        }
-
-
-        confirmModal.classList.remove(
-            "hidden"
+    const receiver =
+        cleanNumber(
+            receiverInput
+                ? receiverInput.value
+                : ""
         );
 
 
-        document.body.style.overflow =
-            "hidden";
+    const amount =
+        cleanAmount(
+            amountInput
+                ? amountInput.value
+                : ""
+        );
+
+
+    if (confirmReceiver) {
+        confirmReceiver.textContent =
+            receiver || "-";
+    }
+
+
+    if (confirmAmount) {
+
+        confirmAmount.textContent =
+            amount
+                ? amount + " شيكل"
+                : "-";
 
     }
-);
 
 
-/* ==========================================
-   إغلاق نافذة التأكيد
-========================================== */
+    if (selectedService === "bank") {
 
-function closeConfirmModal() {
+        hideElement(confirmReceiverRow);
+        hideElement(confirmAmountRow);
 
-    confirmModal.classList.add(
-        "hidden"
-    );
+    } else {
 
-    document.body.style.overflow =
-        "";
+        showElement(confirmReceiverRow);
+        showElement(confirmAmountRow);
+
+    }
+
+
+    showElement(confirmModal);
 
 }
 
 
-cancelCallButton.addEventListener(
-    "click",
-    closeConfirmModal
-);
+/* =========================================
+   إغلاق التأكيد
+========================================= */
+
+function closeConfirmation() {
+
+    hideElement(confirmModal);
+
+}
 
 
-document
-    .querySelector(".confirm-overlay")
-    .addEventListener(
+/* =========================================
+   تأكيد الاتصال
+========================================= */
+
+if (confirmCallButton) {
+
+    confirmCallButton.addEventListener(
         "click",
-        closeConfirmModal
-    );
+        () => {
+
+            closeConfirmation();
 
 
-/* ==========================================
-   الاتصال
-========================================== */
+            /*
+               بنك فلسطين:
+               اتصال مباشر بدون USSD
+            */
 
-confirmCallButton.addEventListener(
-    "click",
-    () => {
+            if (selectedService === "bank") {
 
-        closeConfirmModal();
+                saveHistory();
+
+                /*
+                   لا نضع رقمًا أو مبلغًا
+                   لبنك فلسطين.
+                */
+
+                window.location.href =
+                    "tel:";
+
+                return;
+            }
 
 
-        if (!currentUssdCode) {
+            /*
+               باقي الخدمات
+            */
 
-            return;
+            if (pendingCallHref) {
+
+                saveHistory();
+
+                window.location.href =
+                    pendingCallHref;
+
+            }
 
         }
+    );
+
+}
 
 
-        window.location.href =
-            `tel:${encodeURIComponent(
-                currentUssdCode
-            )}`;
+/* =========================================
+   إلغاء الاتصال
+========================================= */
 
-    }
-);
+if (cancelCallButton) {
+
+    cancelCallButton.addEventListener(
+        "click",
+        closeConfirmation
+    );
+
+}
 
 
-/* ==========================================
-   Local Storage
-========================================== */
+/* الضغط على الخلفية لإغلاق النافذة */
+
+const confirmOverlay =
+    document.querySelector(
+        ".confirm-overlay"
+    );
+
+if (confirmOverlay) {
+
+    confirmOverlay.addEventListener(
+        "click",
+        closeConfirmation
+    );
+
+}
+
+
+/* =========================================
+   السجل
+========================================= */
 
 function getHistory() {
 
     try {
 
-        const data =
-            JSON.parse(
-                localStorage.getItem(
-                    "alcode_history"
-                )
+        const saved =
+            localStorage.getItem(
+                HISTORY_KEY
             );
 
+        if (!saved) {
+            return [];
+        }
 
-        return Array.isArray(data)
-            ? data
+        const parsed =
+            JSON.parse(saved);
+
+        return Array.isArray(parsed)
+            ? parsed
             : [];
 
-    } catch {
+    } catch (error) {
 
         return [];
 
@@ -764,43 +809,93 @@ function getHistory() {
 }
 
 
-/* ==========================================
-   حفظ الحركة
-========================================== */
+/* =========================================
+   حفظ السجل
+========================================= */
 
-function saveHistory(operation) {
+function saveHistory() {
 
     const history =
         getHistory();
 
 
-    history.unshift({
-
-        ...operation,
+    const item = {
 
         id:
-            Date.now() +
-            Math.random()
-                .toString(16)
-                .slice(2),
+            Date.now(),
+
+        service:
+            selectedService,
+
+        serviceName:
+            serviceNames[selectedService] ||
+            selectedService,
+
+        payment:
+            selectedPayment,
+
+        paymentName:
+            paymentNames[selectedPayment] ||
+            "",
+
+        receiver:
+            cleanNumber(
+                receiverInput
+                    ? receiverInput.value
+                    : ""
+            ),
+
+        amount:
+            cleanAmount(
+                amountInput
+                    ? amountInput.value
+                    : ""
+            ),
+
+        notes:
+            notesInput
+                ? notesInput.value.trim()
+                : "",
+
+        code:
+            currentUSSD,
 
         date:
             new Date().toLocaleString(
                 "ar-PS"
             )
 
-    });
+    };
 
 
-    localStorage.setItem(
+    history.unshift(item);
 
-        "alcode_history",
 
-        JSON.stringify(
-            history.slice(0, 50)
-        )
+    /*
+       نحتفظ بآخر 100 حركة
+    */
 
-    );
+    const limitedHistory =
+        history.slice(0, 100);
+
+
+    try {
+
+        localStorage.setItem(
+            HISTORY_KEY,
+            JSON.stringify(
+                limitedHistory
+            )
+        );
+
+    } catch (error) {
+
+        console.log(
+            "تعذر حفظ السجل",
+            error
+        );
+
+    }
 
 
     renderHistory();
@@ -808,122 +903,133 @@ function saveHistory(operation) {
 }
 
 
-/* ==========================================
+/* =========================================
    عرض السجل
-========================================== */
+========================================= */
 
 function renderHistory() {
+
+    if (!historyContainer) {
+        return;
+    }
+
 
     const history =
         getHistory();
 
 
-    if (!history.length) {
+    if (history.length === 0) {
 
         historyContainer.innerHTML = `
-
             <div class="empty-history">
                 لا توجد عمليات حتى الآن
             </div>
-
         `;
 
         return;
-
     }
 
 
-    historyContainer.innerHTML = "";
+    historyContainer.innerHTML =
+        history.map(
+            (item, index) => {
 
+                return `
 
-    history.forEach(
-        (item, index) => {
-
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-
-            element.className =
-                "history-item";
-
-
-            const amount =
-                item.amount === "-"
-                    ? "-"
-                    : `${item.amount} شيكل`;
-
-
-            element.innerHTML = `
-
-                <button
-                    class="history-summary"
-                    type="button"
+                <div
+                    class="history-item"
+                    data-id="${item.id}"
                 >
 
-                    <span
-                        class="history-summary-info"
+                    <button
+                        class="history-summary"
+                        type="button"
                     >
 
                         <span
-                            class="history-number"
-                        >
-                            ${index + 1}
-                        </span>
-
-                        <span
-                            class="history-summary-text"
+                            class="history-summary-info"
                         >
 
-                            <strong>
-                                ${escapeHTML(
-                                    item.service
-                                )}
-                            </strong>
-
-                            <small>
-                                ${escapeHTML(
-                                    amount
-                                )}
-                            </small>
-
-                        </span>
-
-                    </span>
-
-
-                    <span class="history-arrow">
-                        ‹
-                    </span>
-
-                </button>
-
-
-                <div class="history-content">
-
-                    <div class="history-details">
-
-
-                        <div class="history-detail-row">
-
-                            <span>
-                                نوع العملية
+                            <span
+                                class="history-number"
+                            >
+                                ${index + 1}
                             </span>
 
-                            <strong>
-                                ${escapeHTML(
-                                    item.payment
-                                )}
-                            </strong>
 
-                        </div>
+                            <span
+                                class="history-summary-text"
+                            >
+
+                                <strong>
+                                    ${escapeHTML(
+                                        item.serviceName ||
+                                        "عملية"
+                                    )}
+                                </strong>
+
+                                <small>
+                                    ${escapeHTML(
+                                        item.date || ""
+                                    )}
+                                </small>
+
+                            </span>
+
+                        </span>
 
 
-                        ${
-                            item.receiver !== "-"
+                        <span class="history-arrow">
+                            ‹
+                        </span>
+
+                    </button>
+
+
+                    <div class="history-content">
+
+                        <div class="history-details">
+
+
+                            <div class="history-detail-row">
+
+                                <span>
+                                    الخدمة
+                                </span>
+
+                                <strong>
+                                    ${escapeHTML(
+                                        item.serviceName || "-"
+                                    )}
+                                </strong>
+
+                            </div>
+
+
+                            ${
+                                item.paymentName
                                 ? `
+                                <div class="history-detail-row">
 
+                                    <span>
+                                        طريقة الدفع
+                                    </span>
+
+                                    <strong>
+                                        ${escapeHTML(
+                                            item.paymentName
+                                        )}
+                                    </strong>
+
+                                </div>
+                                `
+                                : ""
+                            }
+
+
+                            ${
+                                item.receiver
+                                ? `
                                 <div class="history-detail-row">
 
                                     <span>
@@ -937,16 +1043,14 @@ function renderHistory() {
                                     </strong>
 
                                 </div>
-
                                 `
                                 : ""
-                        }
+                            }
 
 
-                        ${
-                            item.amount !== "-"
+                            ${
+                                item.amount
                                 ? `
-
                                 <div class="history-detail-row">
 
                                     <span>
@@ -955,26 +1059,23 @@ function renderHistory() {
 
                                     <strong>
                                         ${escapeHTML(
-                                            amount
-                                        )}
+                                            item.amount
+                                        )} شيكل
                                     </strong>
 
                                 </div>
-
                                 `
                                 : ""
-                        }
+                            }
 
 
-                        ${
-                            item.notes &&
-                            item.notes !== "-"
+                            ${
+                                item.notes
                                 ? `
-
                                 <div class="history-detail-row">
 
                                     <span>
-                                        ملاحظات
+                                        الملاحظات
                                     </span>
 
                                     <strong>
@@ -984,74 +1085,75 @@ function renderHistory() {
                                     </strong>
 
                                 </div>
-
                                 `
                                 : ""
-                        }
+                            }
 
 
-                        <div class="history-detail-row">
-
-                            <span>
-                                التاريخ
-                            </span>
-
-                            <strong>
-                                ${escapeHTML(
-                                    item.date
-                                )}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="history-code">
-                            ${escapeHTML(
+                            ${
                                 item.code
-                            )}
+                                ? `
+                                <div class="history-code">
+                                    ${escapeHTML(
+                                        item.code
+                                    )}
+                                </div>
+                                `
+                                : ""
+                            }
+
+
+                            <button
+                                class="delete-history-button"
+                                type="button"
+                                data-delete-id="${item.id}"
+                            >
+                                🗑 حذف من السجل
+                            </button>
+
+
                         </div>
-
-
-                        <button
-                            class="delete-history-button"
-                            type="button"
-                            data-id="${item.id}"
-                        >
-                            🗑️ حذف الحركة
-                        </button>
 
                     </div>
 
                 </div>
 
-            `;
+                `;
+
+            }
+        ).join("");
 
 
-            historyContainer.appendChild(
-                element
+    attachHistoryEvents();
+
+}
+
+
+/* =========================================
+   أحداث السجل
+========================================= */
+
+function attachHistoryEvents() {
+
+    const items =
+        historyContainer.querySelectorAll(
+            ".history-item"
+        );
+
+
+    items.forEach(item => {
+
+        const summary =
+            item.querySelector(
+                ".history-summary"
             );
 
-        }
-    );
 
+        if (summary) {
 
-    /* فتح الحركة */
-
-    document
-        .querySelectorAll(
-            ".history-summary"
-        )
-        .forEach(button => {
-
-            button.addEventListener(
+            summary.addEventListener(
                 "click",
                 () => {
-
-                    const item =
-                        button.closest(
-                            ".history-item"
-                        );
-
 
                     item.classList.toggle(
                         "open"
@@ -1060,70 +1162,72 @@ function renderHistory() {
                 }
             );
 
-        });
+        }
 
 
-    /* حذف الحركة */
+        const deleteButton =
+            item.querySelector(
+                ".delete-history-button"
+            );
 
-    document
-        .querySelectorAll(
-            ".delete-history-button"
-        )
-        .forEach(button => {
 
-            button.addEventListener(
+        if (deleteButton) {
+
+            deleteButton.addEventListener(
                 "click",
                 event => {
 
                     event.stopPropagation();
 
 
-                    deleteHistory(
-                        button.dataset.id
-                    );
+                    const id =
+                        Number(
+                            deleteButton.dataset.deleteId
+                        );
+
+
+                    deleteHistory(id);
 
                 }
             );
 
-        });
+        }
+
+    });
 
 }
 
 
-/* ==========================================
+/* =========================================
    حذف حركة
-========================================== */
+========================================= */
 
 function deleteHistory(id) {
 
-    const confirmed =
-        confirm(
-            "هل تريد حذف هذه الحركة؟"
+    const history =
+        getHistory();
+
+
+    const filtered =
+        history.filter(
+            item =>
+                Number(item.id) !==
+                Number(id)
         );
 
 
-    if (!confirmed) {
+    try {
 
-        return;
+        localStorage.setItem(
+            HISTORY_KEY,
+            JSON.stringify(filtered)
+        );
+
+    } catch (error) {
+
+        console.log(error);
 
     }
-
-
-    const history =
-        getHistory().filter(
-            item =>
-                String(item.id) !==
-                String(id)
-        );
-
-
-    localStorage.setItem(
-
-        "alcode_history",
-
-        JSON.stringify(history)
-
-    );
 
 
     renderHistory();
@@ -1131,163 +1235,217 @@ function deleteHistory(id) {
 }
 
 
-/* ==========================================
-   مسح السجل
-========================================== */
+/* =========================================
+   مسح السجل كاملًا
+========================================= */
 
-clearHistoryButton.addEventListener(
-    "click",
-    event => {
+if (clearHistoryButton) {
 
-        event.stopPropagation();
+    clearHistoryButton.addEventListener(
+        "click",
+        () => {
+
+            const history =
+                getHistory();
 
 
-        if (!getHistory().length) {
+            if (history.length === 0) {
 
-            alert(
-                "السجل فارغ."
+                alert(
+                    "السجل فارغ بالفعل."
+                );
+
+                return;
+
+            }
+
+
+            const confirmed =
+                confirm(
+                    "هل أنت متأكد من حذف جميع الحركات؟"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            localStorage.removeItem(
+                HISTORY_KEY
             );
 
-            return;
+
+            renderHistory();
 
         }
+    );
+
+}
 
 
-        const confirmed =
-            confirm(
-                "هل أنت متأكد من مسح جميع الحركات؟"
-            );
+/* =========================================
+   فتح وإغلاق قائمة السجل
+========================================= */
+
+if (historyToggle) {
+
+    historyToggle.addEventListener(
+        "click",
+        () => {
+
+            if (historyCard) {
+
+                historyCard.classList.toggle(
+                    "open"
+                );
 
 
-        if (!confirmed) {
+                const isOpen =
+                    historyCard.classList.contains(
+                        "open"
+                    );
 
-            return;
+
+                historyToggle.setAttribute(
+                    "aria-expanded",
+                    String(isOpen)
+                );
+
+            }
 
         }
+    );
+
+}
 
 
-        localStorage.removeItem(
-            "alcode_history"
-        );
-
-
-        renderHistory();
-
-    }
-);
-
-
-/* ==========================================
+/* =========================================
    الوضع الليلي
-========================================== */
+========================================= */
 
-function updateThemeIcon() {
-
-    themeButton.textContent =
-        document.body.classList.contains(
-            "dark"
-        )
-            ? "☀️"
-            : "🌙";
-
-}
+const THEME_KEY =
+    "alkod_alwasit_theme";
 
 
-themeButton.addEventListener(
-    "click",
-    () => {
+function loadTheme() {
 
-        document.body.classList.toggle(
-            "dark"
+    const savedTheme =
+        localStorage.getItem(
+            THEME_KEY
         );
 
 
-        const mode =
-            document.body.classList.contains(
-                "dark"
-            )
-                ? "dark"
-                : "light";
+    if (savedTheme === "dark") {
 
-
-        localStorage.setItem(
-            "alcode_theme",
-            mode
+        document.body.classList.add(
+            "dark"
         );
 
+        if (themeButton) {
+            themeButton.textContent =
+                "☀️";
+        }
 
-        updateThemeIcon();
+    } else {
+
+        document.body.classList.remove(
+            "dark"
+        );
+
+        if (themeButton) {
+            themeButton.textContent =
+                "🌙";
+        }
 
     }
-);
+
+}
 
 
-const savedTheme =
-    localStorage.getItem(
-        "alcode_theme"
-    );
+if (themeButton) {
+
+    themeButton.addEventListener(
+        "click",
+        () => {
+
+            document.body.classList.toggle(
+                "dark"
+            );
 
 
-if (savedTheme === "dark") {
+            const isDark =
+                document.body.classList.contains(
+                    "dark"
+                );
 
-    document.body.classList.add(
-        "dark"
+
+            localStorage.setItem(
+                THEME_KEY,
+                isDark
+                    ? "dark"
+                    : "light"
+            );
+
+
+            themeButton.textContent =
+                isDark
+                    ? "☀️"
+                    : "🌙";
+
+        }
     );
 
 }
 
 
-updateThemeIcon();
-
-
-/* ==========================================
-   حماية النصوص
-========================================== */
+/* =========================================
+   حماية النصوص عند عرضها في HTML
+========================================= */
 
 function escapeHTML(value) {
 
-    if (
-        value === null ||
-        value === undefined
-    ) {
-
-        return "";
-
-    }
-
-
-    return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
 
-/* ==========================================
-   تشغيل السجل
-========================================== */
+/* =========================================
+   إغلاق النافذة بزر Escape
+========================================= */
 
-renderHistory();
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Escape") {
+
+            closeConfirmation();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   التشغيل الأول
+========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadTheme();
+
+        renderHistory();
+
+        updateServiceFields();
+
+    }
+);
