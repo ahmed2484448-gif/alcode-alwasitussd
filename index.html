@@ -2,55 +2,44 @@
 <html lang="ar" dir="rtl">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        content="width=device-width, initial-scale=1.0">
 
     <meta
         name="theme-color"
-        content="#07131d"
-    >
+        content="#071119">
 
     <meta
         name="description"
-        content="تطبيق الكود الوسيط"
-    >
+        content="تطبيق الكود الوسيط لتحويل الأموال عبر خدمات الدفع">
+
+    <title>تطبيق الكود الوسيط</title>
 
     <link
         rel="stylesheet"
-        href="style.css"
-    >
+        href="style.css">
 
     <link
         rel="manifest"
-        href="manifest.json"
-    >
+        href="manifest.json">
 
-    <title>تطبيق الكود الوسيط</title>
 </head>
 
 
 <body>
 
-    <!-- ================================
-         رأس الموقع
-    ================================= -->
 
-    <header class="top-header">
+    <!-- ==============================
+         رأس التطبيق
+    =============================== -->
 
-        <button
-            id="themeButton"
-            class="theme-button"
-            type="button"
-            aria-label="تغيير الوضع"
-        >
-            🌙
-        </button>
+    <header class="header">
 
-        <div class="header-content">
+        <div class="brand">
 
             <h1>
                 تطبيق الكود الوسيط
@@ -62,45 +51,47 @@
 
         </div>
 
+
+        <button
+            id="themeButton"
+            class="theme-button"
+            type="button"
+            aria-label="تغيير الوضع">
+
+            ☀️
+
+        </button>
+
     </header>
 
 
-    <!-- ================================
-         المحتوى
-    ================================= -->
 
     <main class="container">
 
 
-        <!-- اختيار جهة التحويل -->
+        <!-- ==============================
+             خدمات الدفع
+        =============================== -->
 
         <section class="card">
 
             <h2>
-                اختر جهة التحويل
+                اختر خدمة الدفع
             </h2>
 
 
-            <div class="services-grid">
+            <div class="services">
 
-
-                <!-- جوال بي -->
 
                 <button
                     class="service"
                     data-service="jawwal"
-                    type="button"
-                >
+                    type="button">
 
-                    <div class="service-image">
-
-                        <img
-                            src="images/1.png"
-                            alt="جوال بي"
-                            onerror="this.style.display='none'"
-                        >
-
-                    </div>
+                    <img
+                        src="images/1.png"
+                        alt="جوال بي"
+                        class="service-logo">
 
                     <span>
                         جوال بي
@@ -109,23 +100,16 @@
                 </button>
 
 
-                <!-- بال بي -->
 
                 <button
                     class="service"
                     data-service="palpay"
-                    type="button"
-                >
+                    type="button">
 
-                    <div class="service-image">
-
-                        <img
-                            src="images/2.png"
-                            alt="بال بي"
-                            onerror="this.style.display='none'"
-                        >
-
-                    </div>
+                    <img
+                        src="images/2.png"
+                        alt="بال بي"
+                        class="service-logo">
 
                     <span>
                         بال بي
@@ -134,23 +118,16 @@
                 </button>
 
 
-                <!-- بنك فلسطين -->
 
                 <button
                     class="service"
                     data-service="bank"
-                    type="button"
-                >
+                    type="button">
 
-                    <div class="service-image">
-
-                        <img
-                            src="images/3.png"
-                            alt="بنك فلسطين"
-                            onerror="this.style.display='none'"
-                        >
-
-                    </div>
+                    <img
+                        src="images/3.png"
+                        alt="بنك فلسطين"
+                        class="service-logo">
 
                     <span>
                         بنك فلسطين
@@ -158,15 +135,16 @@
 
                 </button>
 
+
             </div>
 
         </section>
 
 
 
-        <!-- ================================
+        <!-- ==============================
              طريقة الدفع
-        ================================= -->
+        =============================== -->
 
         <section class="card">
 
@@ -175,21 +153,16 @@
             </h2>
 
 
-            <div class="payment-grid">
+            <div class="payment-types">
+
 
                 <button
                     class="payment-type"
                     data-type="friend"
-                    type="button"
-                >
+                    type="button">
 
-                    <span class="payment-icon">
-                        👤
-                    </span>
-
-                    <span>
-                        الدفع لصديق
-                    </span>
+                    👤
+                    الدفع لصديق
 
                 </button>
 
@@ -197,18 +170,13 @@
                 <button
                     class="payment-type"
                     data-type="merchant"
-                    type="button"
-                >
+                    type="button">
 
-                    <span class="payment-icon">
-                        🏪
-                    </span>
-
-                    <span>
-                        الدفع لتاجر
-                    </span>
+                    🏪
+                    الدفع لتاجر
 
                 </button>
+
 
             </div>
 
@@ -216,213 +184,298 @@
 
 
 
-        <!-- ================================
+        <!-- ==============================
              بيانات العملية
-        ================================= -->
+        =============================== -->
 
         <section class="card">
-
-            <h2>
-                بيانات العملية
-            </h2>
 
 
             <div
                 id="receiverGroup"
-                class="input-group"
-            >
+                class="input-group">
 
                 <label for="receiver">
                     رقم المستلم
                 </label>
+
 
                 <input
                     id="receiver"
                     type="tel"
                     inputmode="numeric"
                     autocomplete="off"
-                    placeholder="أدخل رقم المستلم"
-                >
+                    placeholder="أدخل رقم المستلم">
 
             </div>
 
 
+
             <div
                 id="amountGroup"
-                class="input-group"
-            >
+                class="input-group">
 
                 <label for="amount">
+
                     المبلغ
+
+                    <span>
+                        (بالشيكل)
+                    </span>
+
                 </label>
+
 
                 <input
                     id="amount"
                     type="number"
                     inputmode="decimal"
-                    min="0"
+                    min="1"
                     step="0.01"
-                    placeholder="أدخل المبلغ"
-                >
+                    placeholder="مثال: 50">
 
             </div>
+
 
 
             <div
                 id="notesGroup"
-                class="input-group"
-            >
+                class="input-group">
 
                 <label for="notes">
+
                     ملاحظات
+
+                    <span>
+                        (اختياري)
+                    </span>
+
                 </label>
+
 
                 <textarea
                     id="notes"
                     rows="3"
-                    placeholder="ملاحظات اختيارية"
-                ></textarea>
+                    placeholder="اكتب ملاحظة إن وجدت..."></textarea>
 
             </div>
+
 
 
             <button
                 id="createButton"
-                class="main-button"
-                type="button"
-            >
-                إنشاء العملية
+                class="create-button"
+                type="button">
+
+                إنشاء الكود وإكمال العملية
+
             </button>
 
         </section>
 
 
 
-        <!-- ================================
-             النتيجة
-        ================================= -->
+        <!-- ==============================
+             نتيجة العملية
+        =============================== -->
 
         <section
             id="resultSection"
-            class="card result-card hidden"
-        >
+            class="card result hidden">
 
-            <div class="success-icon">
-                ✓
-            </div>
 
             <h2>
-                العملية جاهزة
+                كود العملية
             </h2>
-
-            <p id="resultMessage">
-                تم تجهيز العملية.
-            </p>
 
 
             <div
                 id="ussdCode"
-                class="ussd-code"
-            >
-                —
+                class="ussd-code">
+
+                -
+
             </div>
 
 
-            <button
-                id="callButton"
-                class="main-button"
-                type="button"
-            >
-                📞 الاتصال
-            </button>
+            <p id="resultMessage">
+            </p>
+
+
+            <div class="result-buttons">
+
+
+                <button
+                    id="copyButton"
+                    class="secondary-button"
+                    type="button">
+
+                    📋 نسخ الكود
+
+                </button>
+
+
+                <a
+                    id="callButton"
+                    class="call-button"
+                    href="#">
+
+                    📞 تنفيذ التحويل
+
+                </a>
+
+
+            </div>
 
         </section>
 
 
 
-        <!-- ================================
-             السجل
-        ================================= -->
+        <!-- ==============================
+             سجل الحركات
+        =============================== -->
 
-        <section class="card history-card">
+        <section
+            class="card history-card">
+
+
+            <div class="history-title">
+
+                <h2>
+                    سجل الحركات
+                </h2>
+
+
+                <button
+                    id="clearHistoryButton"
+                    type="button">
+
+                    مسح السجل
+
+                </button>
+
+            </div>
+
 
             <button
                 id="historyToggle"
-                class="history-toggle"
                 type="button"
-                aria-expanded="false"
-            >
-
-                <span>
-                    📋 سجل الحركات
-                </span>
-
-                <span class="history-toggle-arrow">
-                    ‹
-                </span>
+                aria-expanded="true"
+                class="hidden">
 
             </button>
 
 
             <div
                 id="historyPanel"
-                class="history-panel"
-            >
+                class="history-panel">
 
-                <div
-                    id="historyContainer"
-                    class="history-container"
-                >
+                <div id="historyContainer">
+
+                    <div class="empty-history">
+
+                        لا توجد عمليات حتى الآن
+
+                    </div>
+
                 </div>
-
-
-                <button
-                    id="clearHistoryButton"
-                    class="clear-history-button"
-                    type="button"
-                >
-                    🗑 حذف جميع الحركات
-                </button>
 
             </div>
 
         </section>
 
+
+
+        <!-- ==============================
+             حقوق المطور
+        =============================== -->
+
+        <section class="developer-card">
+
+
+            <div class="developer-line"></div>
+
+
+            <div class="developer-icon">
+                ✦
+            </div>
+
+
+            <div class="developer-title">
+
+                صنع بواسطة أحمد فرج الله
+
+            </div>
+
+
+            <div class="developer-subtitle">
+
+                تطوير لفكرة أ. بكر السنكري
+
+            </div>
+
+
+            <div class="developer-line"></div>
+
+
+        </section>
+
+
     </main>
 
 
 
-    <!-- ================================
-         نافذة تأكيد الاتصال
-    ================================= -->
+    <!-- ==============================
+         أسفل الصفحة
+    =============================== -->
+
+    <footer>
+
+        تطبيق الكود الوسيط © 2026
+
+    </footer>
+
+
+
+    <!-- ==============================
+         نافذة تأكيد العملية
+    =============================== -->
 
     <div
         id="confirmModal"
-        class="confirm-modal hidden"
-    >
+        class="confirm-modal hidden">
+
 
         <div class="confirm-overlay"></div>
 
 
         <div class="confirm-box">
 
+
             <div class="confirm-icon">
-                📞
+                ⚠️
             </div>
 
+
             <h2>
-                تأكيد الاتصال
+                تأكيد العملية
             </h2>
 
+
             <p class="confirm-text">
-                هل تريد تأكيد الاتصال وإكمال العملية؟
+
+                يرجى التأكد من بيانات العملية
+                قبل المتابعة.
+
             </p>
 
 
-            <div class="confirm-details">
+            <div
+                class="confirm-details">
 
 
-                <div class="confirm-row">
+                <div
+                    class="history-detail-row">
 
                     <span>
                         الخدمة
@@ -435,10 +488,10 @@
                 </div>
 
 
+
                 <div
                     id="confirmPaymentRow"
-                    class="confirm-row"
-                >
+                    class="history-detail-row">
 
                     <span>
                         طريقة الدفع
@@ -451,10 +504,10 @@
                 </div>
 
 
+
                 <div
                     id="confirmReceiverRow"
-                    class="confirm-row"
-                >
+                    class="history-detail-row">
 
                     <span>
                         رقم المستلم
@@ -467,10 +520,10 @@
                 </div>
 
 
+
                 <div
                     id="confirmAmountRow"
-                    class="confirm-row"
-                >
+                    class="history-detail-row">
 
                     <span>
                         المبلغ
@@ -482,29 +535,36 @@
 
                 </div>
 
+
             </div>
+
 
 
             <div class="confirm-buttons">
 
+
                 <button
                     id="confirmCallButton"
                     class="confirm-yes"
-                    type="button"
-                >
-                    ✓ نعم، تأكيد الاتصال
+                    type="button">
+
+                    ✓ تأكيد وتنفيذ
+
                 </button>
 
 
                 <button
                     id="cancelCallButton"
                     class="confirm-no"
-                    type="button"
-                >
+                    type="button">
+
                     إلغاء
+
                 </button>
 
+
             </div>
+
 
         </div>
 
@@ -512,23 +572,13 @@
 
 
 
-    <!-- ================================
-         أسفل الموقع
-    ================================= -->
+    <!-- ==============================
+         JavaScript
+    =============================== -->
 
-    <footer class="footer">
-
-        <div>
-            صدقة جارية
-        </div>
-
-    </footer>
-
-
-
-    <!-- JavaScript -->
     <script src="script.js"></script>
 
 
 </body>
+
 </html>

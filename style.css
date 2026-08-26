@@ -1,823 +1,824 @@
+/* ==================================================
+   تطبيق الكود الوسيط - style.css
+================================================== */
+
+:root {
+    --bg: #f4f8fa;
+    --card: #ffffff;
+    --text: #263840;
+    --muted: #74858c;
+    --border: #dce7eb;
+
+    --primary: #5f9fb7;
+    --primary-hover: #4d8da5;
+    --primary-soft: #e8f4f8;
+
+    --success: #61977b;
+    --danger: #b97878;
+
+    --input: #f8fafb;
+
+    --shadow: 0 10px 30px rgba(44, 78, 90, .08);
+}
+
+
+/* ==================================================
+   الوضع المظلم
+================================================== */
+
+body:not(.light-mode) {
+
+    --bg: #071119;
+    --card: #0d1a23;
+    --text: #e8f6fa;
+    --muted: #9bb0b8;
+    --border: #213944;
+
+    --primary: #69b9d7;
+    --primary-hover: #82c8e2;
+    --primary-soft: #102e3d;
+
+    --success: #70aa8d;
+    --danger: #cb8888;
+
+    --input: #09151d;
+
+    --shadow:
+        0 0 30px rgba(45, 178, 230, .07);
+}
+
+
+/* ==================================================
+   إعدادات عامة
+================================================== */
+
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
+
 
 html {
     scroll-behavior: smooth;
 }
 
+
 body {
-    margin: 0;
+
     min-height: 100vh;
 
+    background: var(--bg);
+
+    color: var(--text);
+
     font-family:
+        Tahoma,
         Arial,
-        "Tahoma",
         sans-serif;
 
-    background:
-        #06111a;
-
-    color:
-        #f1f5f9;
+    direction: rtl;
 
     transition:
-        background 0.3s ease,
-        color 0.3s ease;
+        background .3s ease,
+        color .3s ease;
 }
 
 
-/* =================================
+/* ==================================================
    الرأس
-================================= */
+================================================== */
 
-.top-header {
+.header {
+
+    width: 100%;
+    max-width: 950px;
+
+    margin: auto;
+
+    padding: 30px 20px 22px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
     position: relative;
+}
+
+
+.brand {
+    text-align: center;
+}
+
+
+.brand h1 {
+
+    font-size: 34px;
+
+    font-weight: 800;
+
+    line-height: 1.4;
+
+    letter-spacing: -.5px;
+}
+
+
+.brand p {
+
+    margin-top: 7px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+/* ==================================================
+   زر الوضع
+================================================== */
+
+.theme-button {
+
+    position: absolute;
+
+    left: 20px;
+    top: 30px;
+
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    border: 1px solid var(--border);
+
+    background: var(--card);
+
+    color: var(--text);
+
+    font-size: 19px;
+
+    cursor: pointer;
+
+    box-shadow: var(--shadow);
+
+    transition:
+        transform .2s ease,
+        background .3s ease;
+}
+
+
+.theme-button:hover {
+
+    transform:
+        scale(1.07) rotate(8deg);
+}
+
+
+/* ==================================================
+   المحتوى
+================================================== */
+
+.container {
+
+    width: 100%;
+
+    max-width: 950px;
+
+    margin: auto;
 
     padding:
-        35px 20px 25px;
+        5px 20px 30px;
+}
+
+
+/* ==================================================
+   البطاقات
+================================================== */
+
+.card {
+
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 20px;
+
+    padding: 24px;
+
+    margin-bottom: 18px;
+
+    box-shadow: var(--shadow);
+
+    transition:
+        background .3s ease,
+        border .3s ease,
+        box-shadow .3s ease;
+}
+
+
+.card h2 {
+
+    font-size: 19px;
+
+    margin-bottom: 18px;
+}
+
+
+/* ==================================================
+   خدمات الدفع
+================================================== */
+
+.services {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+}
+
+
+.service {
+
+    min-height: 105px;
+
+    padding: 12px 6px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 15px;
+
+    background: var(--card);
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        border .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.service:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        var(--primary);
+}
+
+
+.service.active {
+
+    background:
+        var(--primary-soft);
+
+    border-color:
+        var(--primary);
+
+    box-shadow:
+        0 5px 18px
+        rgba(80, 160, 190, .12);
+}
+
+
+.service-logo {
+
+    width: 42px;
+
+    height: 42px;
+
+    object-fit: contain;
+
+    display: block;
+
+    margin:
+        0 auto 8px;
+}
+
+
+.service span {
+
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+/* ==================================================
+   طرق الدفع
+================================================== */
+
+.payment-types {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+}
+
+
+.payment-type {
+
+    padding: 16px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    background: var(--card);
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        border .2s ease,
+        background .2s ease;
+}
+
+
+.payment-type:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        var(--primary);
+}
+
+
+.payment-type.active {
+
+    background:
+        var(--primary-soft);
+
+    border-color:
+        var(--primary);
+}
+
+
+/* ==================================================
+   الحقول
+================================================== */
+
+.input-group {
+
+    margin-bottom: 17px;
+}
+
+
+.input-group label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+.input-group label span {
+
+    color: var(--muted);
+
+    font-weight: normal;
+}
+
+
+input,
+textarea {
+
+    width: 100%;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 13px;
+
+    background:
+        var(--input);
+
+    color:
+        var(--text);
+
+    padding:
+        13px 14px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    transition:
+        border .2s ease,
+        box-shadow .2s ease;
+}
+
+
+input:focus,
+textarea:focus {
+
+    border-color:
+        var(--primary);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(80, 170, 205, .12);
+}
+
+
+input::placeholder,
+textarea::placeholder {
+
+    color:
+        var(--muted);
+}
+
+
+textarea {
+
+    min-height: 90px;
+
+    resize: vertical;
+}
+
+
+/* ==================================================
+   زر إنشاء الكود
+================================================== */
+
+.create-button {
+
+    width: 100%;
+
+    padding: 16px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background:
+        var(--primary);
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.create-button:hover {
+
+    background:
+        var(--primary-hover);
+
+    transform:
+        translateY(-2px);
+}
+
+
+body:not(.light-mode)
+.create-button {
+
+    box-shadow:
+        0 0 18px
+        rgba(55, 185, 235, .18);
+}
+
+
+/* ==================================================
+   نتيجة العملية
+================================================== */
+
+.result {
 
     text-align: center;
 }
 
 
-.header-content h1 {
-    margin:
-        0 0 8px;
+.ussd-code {
 
-    font-size:
-        clamp(30px, 6vw, 48px);
+    direction: ltr;
 
-    font-weight:
-        800;
-}
+    text-align: center;
 
+    padding: 17px;
 
-.header-content p {
-    margin:
-        0;
-
-    color:
-        #9fb3c8;
-
-    font-size:
-        14px;
-}
-
-
-.theme-button {
-    position: absolute;
-
-    top: 25px;
-    left: 25px;
-
-    width: 48px;
-    height: 48px;
-
-    border-radius: 50%;
+    margin-bottom: 14px;
 
     border:
-        1px solid #234158;
+        1px dashed var(--primary);
+
+    border-radius: 13px;
 
     background:
-        #0a1a28;
+        var(--primary-soft);
+
+    font-size: 20px;
+
+    font-weight: 800;
+
+    word-break: break-all;
+}
+
+
+.result p {
+
+    color: var(--muted);
+
+    line-height: 1.8;
+
+    margin-bottom: 14px;
+}
+
+
+.result-buttons {
+
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+
+.secondary-button,
+.call-button {
+
+    padding:
+        11px 17px;
+
+    border-radius: 11px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition:
+        transform .2s ease;
+}
+
+
+.secondary-button {
+
+    background:
+        var(--input);
+
+    color:
+        var(--text);
+
+    border:
+        1px solid var(--border);
+}
+
+
+.call-button {
+
+    background:
+        var(--success);
 
     color:
         white;
 
-    font-size:
-        20px;
-
-    cursor:
-        pointer;
+    border: none;
 }
 
 
-/* =================================
-   المحتوى
-================================= */
+.secondary-button:hover,
+.call-button:hover {
 
-.container {
-    width:
-        min(720px, calc(100% - 24px));
-
-    margin:
-        0 auto;
-
-    padding-bottom:
-        30px;
-}
-
-
-/* =================================
-   البطاقات
-================================= */
-
-.card {
-    margin-bottom:
-        18px;
-
-    padding:
-        22px;
-
-    border-radius:
-        22px;
-
-    border:
-        1px solid #1c3a50;
-
-    background:
-        #091925;
-
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
-
-.card h2 {
-    margin:
-        0 0 20px;
-
-    text-align:
-        center;
-
-    font-size:
-        21px;
-}
-
-
-/* =================================
-   الخدمات
-================================= */
-
-.services-grid {
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap:
-        12px;
-}
-
-
-.service {
-    min-height:
-        125px;
-
-    padding:
-        12px;
-
-    border-radius:
-        18px;
-
-    border:
-        1px solid #21435a;
-
-    background:
-        #0a1b29;
-
-    color:
-        #f1f5f9;
-
-    cursor:
-        pointer;
-
-    transition:
-        0.2s ease;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        10px;
-}
-
-
-.service:hover {
     transform:
         translateY(-2px);
-
-    border-color:
-        #4f86aa;
 }
 
 
-.service.active {
-    border-color:
-        #58a6d8;
+/* ==================================================
+   سجل الحركات
+================================================== */
 
-    background:
-        #102b3e;
+.history-title {
 
-    box-shadow:
-        0 0 0 2px
-        rgba(88, 166, 216, 0.15);
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
 }
 
 
-.service-image {
-    width:
-        60px;
+.history-title h2 {
 
-    height:
-        60px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
+    margin: 0;
 }
 
 
-.service-image img {
-    width:
-        58px;
+#clearHistoryButton {
 
-    height:
-        58px;
+    border: none;
 
-    object-fit:
-        contain;
-
-    border-radius:
-        12px;
-}
-
-
-.service span {
-    font-weight:
-        700;
-
-    font-size:
-        15px;
-}
-
-
-/* =================================
-   طرق الدفع
-================================= */
-
-.payment-grid {
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap:
-        12px;
-}
-
-
-.payment-type {
-    min-height:
-        70px;
-
-    border-radius:
-        16px;
-
-    border:
-        1px solid #21435a;
-
-    background:
-        #0a1b29;
+    background: transparent;
 
     color:
-        #f1f5f9;
+        var(--danger);
 
-    cursor:
-        pointer;
+    font-family: inherit;
 
-    font-size:
-        16px;
+    font-size: 12px;
 
-    font-weight:
-        700;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        8px;
-
-    transition:
-        0.2s ease;
-}
-
-
-.payment-type:hover {
-    border-color:
-        #4f86aa;
-}
-
-
-.payment-type.active {
-    border-color:
-        #58a6d8;
-
-    background:
-        #102b3e;
-}
-
-
-.payment-icon {
-    font-size:
-        22px;
-}
-
-
-/* =================================
-   الحقول
-================================= */
-
-.input-group {
-    margin-bottom:
-        16px;
-}
-
-
-.input-group label {
-    display:
-        block;
-
-    margin-bottom:
-        8px;
-
-    font-weight:
-        700;
-
-    font-size:
-        14px;
-}
-
-
-.input-group input,
-.input-group textarea {
-    width:
-        100%;
-
-    padding:
-        14px;
-
-    border-radius:
-        12px;
-
-    border:
-        1px solid #25465c;
-
-    background:
-        #07151f;
-
-    color:
-        white;
-
-    outline:
-        none;
-
-    font-size:
-        16px;
-
-    font-family:
-        inherit;
-}
-
-
-.input-group textarea {
-    resize:
-        vertical;
-}
-
-
-.input-group input:focus,
-.input-group textarea:focus {
-    border-color:
-        #58a6d8;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(88, 166, 216, 0.1);
-}
-
-
-.input-group input::placeholder,
-.input-group textarea::placeholder {
-    color:
-        #71869a;
-}
-
-
-/* =================================
-   الزر الرئيسي
-================================= */
-
-.main-button {
-    width:
-        100%;
-
-    min-height:
-        52px;
-
-    border:
-        0;
-
-    border-radius:
-        14px;
-
-    background:
-        #176b9c;
-
-    color:
-        white;
-
-    font-size:
-        17px;
-
-    font-weight:
-        800;
-
-    cursor:
-        pointer;
-
-    transition:
-        0.2s ease;
-}
-
-
-.main-button:hover {
-    background:
-        #2180b7;
-
-    transform:
-        translateY(-1px);
-}
-
-
-/* =================================
-   النتيجة
-================================= */
-
-.result-card {
-    text-align:
-        center;
-}
-
-
-.success-icon {
-    width:
-        58px;
-
-    height:
-        58px;
-
-    margin:
-        0 auto 12px;
-
-    border-radius:
-        50%;
-
-    background:
-        #123d2c;
-
-    border:
-        1px solid #2f8c64;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    font-size:
-        28px;
-
-    font-weight:
-        900;
-}
-
-
-.result-card p {
-    color:
-        #9fb3c8;
-}
-
-
-.ussd-code {
-    margin:
-        16px 0;
-
-    padding:
-        15px;
-
-    border-radius:
-        12px;
-
-    background:
-        #06111a;
-
-    border:
-        1px solid #1e3a4e;
-
-    direction:
-        ltr;
-
-    text-align:
-        center;
-
-    font-family:
-        monospace;
-
-    font-size:
-        16px;
-
-    word-break:
-        break-all;
-}
-
-
-/* =================================
-   السجل
-================================= */
-
-.history-card {
-    padding:
-        0;
-
-    overflow:
-        hidden;
-}
-
-
-.history-toggle {
-    width:
-        100%;
-
-    min-height:
-        65px;
-
-    padding:
-        0 20px;
-
-    border:
-        0;
-
-    background:
-        transparent;
-
-    color:
-        white;
-
-    cursor:
-        pointer;
-
-    font-size:
-        18px;
-
-    font-weight:
-        800;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-}
-
-
-.history-toggle-arrow {
-    font-size:
-        28px;
-
-    transition:
-        transform 0.2s ease;
-}
-
-
-.history-card.open
-.history-toggle-arrow {
-    transform:
-        rotate(-90deg);
-}
-
-
-.history-panel {
-    display:
-        none;
-
-    padding:
-        0 16px 18px;
-}
-
-
-.history-card.open
-.history-panel {
-    display:
-        block;
-}
-
-
-.history-container {
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    gap:
-        8px;
+    cursor: pointer;
 }
 
 
 .history-item {
-    overflow:
-        hidden;
 
-    border-radius:
-        13px;
+    margin-top: 10px;
 
     border:
-        1px solid #1e3c50;
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    overflow: hidden;
 
     background:
-        #07151f;
+        var(--input);
 }
 
 
 .history-summary {
-    width:
-        100%;
 
-    min-height:
-        65px;
+    width: 100%;
 
-    padding:
-        10px 13px;
+    border: none;
 
-    border:
-        0;
+    background: transparent;
 
-    background:
-        transparent;
+    color: var(--text);
 
-    color:
-        white;
+    padding: 14px;
 
-    cursor:
-        pointer;
+    display: flex;
 
-    display:
-        flex;
+    justify-content: space-between;
 
-    align-items:
-        center;
+    align-items: center;
 
-    justify-content:
-        space-between;
+    text-align: right;
 
-    text-align:
-        right;
+    font-family: inherit;
+
+    cursor: pointer;
 }
 
 
 .history-summary-info {
-    display:
-        flex;
 
-    align-items:
-        center;
+    display: flex;
 
-    gap:
-        10px;
+    align-items: center;
+
+    gap: 10px;
 }
 
 
 .history-number {
-    width:
-        30px;
 
-    height:
-        30px;
+    width: 30px;
 
-    border-radius:
-        50%;
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
 
     background:
-        #123249;
+        var(--primary-soft);
 
-    display:
-        flex;
+    color:
+        var(--primary);
 
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    font-size:
-        13px;
+    font-weight: 800;
 }
 
 
 .history-summary-text {
-    display:
-        flex;
 
-    flex-direction:
-        column;
+    display: flex;
 
-    gap:
-        4px;
-}
+    flex-direction: column;
 
-
-.history-summary-text strong {
-    font-size:
-        15px;
+    gap: 3px;
 }
 
 
 .history-summary-text small {
-    color:
-        #778ea1;
 
-    font-size:
-        11px;
+    color:
+        var(--muted);
+
+    font-size: 11px;
 }
 
 
 .operation-done {
+
     color:
-        #48c98c;
+        var(--success);
 
-    font-size:
-        12px;
+    font-size: 11px;
 
-    font-weight:
-        800;
+    font-weight: 700;
 }
 
 
 .history-arrow {
-    font-size:
-        25px;
+
+    font-size: 24px;
+
+    color:
+        var(--muted);
 
     transition:
-        transform 0.2s ease;
+        transform .2s ease;
 }
 
 
 .history-item.open
 .history-arrow {
+
     transform:
         rotate(-90deg);
 }
 
 
 .history-content {
-    display:
-        none;
+
+    display: none;
 
     padding:
-        0 13px 13px;
+        0 14px 14px;
 }
 
 
 .history-item.open
 .history-content {
-    display:
-        block;
+
+    display: block;
 }
 
 
 .history-details {
+
     border-top:
-        1px solid #183447;
+        1px solid var(--border);
 
     padding-top:
         12px;
@@ -825,490 +826,526 @@ body {
 
 
 .history-detail-row {
-    display:
-        flex;
 
-    justify-content:
-        space-between;
+    display: flex;
 
-    gap:
-        15px;
+    justify-content: space-between;
 
-    padding:
-        7px 0;
+    gap: 10px;
 
-    font-size:
-        14px;
+    padding: 6px 0;
+
+    font-size: 13px;
 }
 
 
 .history-detail-row span {
+
     color:
-        #7890a3;
-}
-
-
-.history-detail-row strong {
-    text-align:
-        left;
-
-    word-break:
-        break-word;
+        var(--muted);
 }
 
 
 .history-code {
-    margin:
-        8px 0;
 
-    padding:
-        10px;
+    direction: ltr;
 
-    border-radius:
-        9px;
+    text-align: center;
+
+    padding: 10px;
+
+    margin-top: 8px;
+
+    border-radius: 10px;
 
     background:
-        #06111a;
+        var(--primary-soft);
 
-    direction:
-        ltr;
+    font-weight: 700;
 
-    text-align:
-        center;
-
-    font-family:
-        monospace;
-
-    font-size:
-        13px;
-
-    word-break:
-        break-all;
+    word-break: break-all;
 }
 
 
 .operation-status {
-    padding:
-        8px 0;
+
+    margin-top: 10px;
+
+    padding: 9px;
+
+    border-radius: 9px;
+
+    text-align: center;
+
+    background:
+        rgba(97, 151, 123, .10);
 
     color:
-        #48c98c;
+        var(--success);
 
-    font-weight:
-        800;
+    font-size: 13px;
 
-    text-align:
-        center;
+    font-weight: 700;
 }
 
 
 .delete-history-button {
-    width:
-        100%;
 
-    margin-top:
-        8px;
+    width: 100%;
 
-    padding:
-        10px;
+    margin-top: 10px;
 
-    border-radius:
-        10px;
+    padding: 9px;
 
-    border:
-        1px solid #613337;
+    border: none;
+
+    border-radius: 9px;
 
     background:
-        #241418;
+        rgba(185, 120, 120, .10);
 
     color:
-        #ff9b9b;
+        var(--danger);
 
-    cursor:
-        pointer;
+    font-family: inherit;
 
-    font-weight:
-        700;
-}
-
-
-.clear-history-button {
-    width:
-        100%;
-
-    margin-top:
-        12px;
-
-    padding:
-        11px;
-
-    border-radius:
-        11px;
-
-    border:
-        1px solid #613337;
-
-    background:
-        #241418;
-
-    color:
-        #ff9b9b;
-
-    cursor:
-        pointer;
-
-    font-weight:
-        700;
+    cursor: pointer;
 }
 
 
 .empty-history {
-    padding:
-        25px 10px;
+
+    text-align: center;
+
+    padding: 25px 10px;
 
     color:
-        #71869a;
+        var(--muted);
 
-    text-align:
-        center;
 }
 
 
-/* =================================
-   نافذة التأكيد
-================================= */
+/* ==================================================
+   بطاقة المطور
+================================================== */
 
-.confirm-modal {
-    position:
-        fixed;
+.developer-card {
 
-    inset:
-        0;
+    position: relative;
 
-    z-index:
-        9999;
+    overflow: hidden;
 
-    display:
-        flex;
+    text-align: center;
 
-    align-items:
-        center;
-
-    justify-content:
-        center;
+    margin:
+        28px 5px 12px;
 
     padding:
-        20px;
-}
-
-
-.confirm-modal.hidden {
-    display:
-        none;
-}
-
-
-.confirm-overlay {
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    background:
-        rgba(0, 0, 0, 0.75);
-}
-
-
-.confirm-box {
-    position:
-        relative;
-
-    z-index:
-        2;
-
-    width:
-        min(430px, 100%);
-
-    padding:
-        25px;
-
-    border-radius:
-        22px;
+        22px 15px;
 
     border:
-        1px solid #27465a;
+        1px solid var(--border);
+
+    border-radius:
+        20px;
 
     background:
-        #091925;
+        var(--card);
 
     box-shadow:
-        0 20px 60px
-        rgba(0, 0, 0, 0.5);
-
-    text-align:
-        center;
+        var(--shadow);
 }
 
 
-.confirm-icon {
-    width:
-        55px;
+body:not(.light-mode)
+.developer-card {
 
-    height:
-        55px;
+    box-shadow:
+        0 0 30px
+        rgba(50, 180, 230, .09);
+}
+
+
+.developer-line {
+
+    width: 70px;
+
+    height: 2px;
 
     margin:
         0 auto 12px;
 
-    border-radius:
-        50%;
+    border-radius: 20px;
 
     background:
-        #123249;
+        var(--primary);
 
-    display:
-        flex;
+    box-shadow:
+        0 0 12px
+        rgba(70, 190, 230, .45);
+}
 
-    align-items:
-        center;
 
-    justify-content:
-        center;
+.developer-icon {
 
-    font-size:
-        25px;
+    color:
+        var(--primary);
+
+    font-size: 19px;
+
+    margin-bottom: 7px;
+}
+
+
+.developer-title {
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    color:
+        var(--text);
+
+    margin-bottom: 6px;
+}
+
+
+.developer-subtitle {
+
+    font-size: 12px;
+
+    color:
+        var(--muted);
+}
+
+
+/* ==================================================
+   إخفاء العناصر
+================================================== */
+
+.hidden {
+
+    display: none !important;
+}
+
+
+/* ==================================================
+   الفوتر
+================================================== */
+
+footer {
+
+    text-align: center;
+
+    padding:
+        5px 20px 30px;
+
+    color:
+        var(--muted);
+
+    font-size: 11px;
+}
+
+
+/* ==================================================
+   نافذة التأكيد
+================================================== */
+
+.confirm-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+}
+
+
+.confirm-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        rgba(0, 0, 0, .55);
+
+    backdrop-filter:
+        blur(5px);
+}
+
+
+.confirm-box {
+
+    position: relative;
+
+    z-index: 1;
+
+    width: 100%;
+
+    max-width: 420px;
+
+    padding: 25px;
+
+    border-radius: 20px;
+
+    border:
+        1px solid var(--border);
+
+    background:
+        var(--card);
+
+    color:
+        var(--text);
+
+    box-shadow:
+        0 20px 60px
+        rgba(0, 0, 0, .25);
+
+    text-align: center;
+}
+
+
+.confirm-icon {
+
+    font-size: 30px;
+
+    margin-bottom: 8px;
 }
 
 
 .confirm-box h2 {
-    margin:
-        0 0 8px;
+
+    margin-bottom: 10px;
 }
 
 
 .confirm-text {
+
     color:
-        #9fb3c8;
+        var(--muted);
 
-    margin:
-        0 0 15px;
-}
+    font-size: 13px;
 
+    line-height: 1.8;
 
-.confirm-details {
-    border:
-        1px solid #1d3a4e;
-
-    border-radius:
-        12px;
-
-    padding:
-        8px 12px;
-
-    margin-bottom:
-        18px;
-}
-
-
-.confirm-row {
-    display:
-        flex;
-
-    justify-content:
-        space-between;
-
-    gap:
-        10px;
-
-    padding:
-        8px 0;
-
-    border-bottom:
-        1px solid #173245;
-
-    font-size:
-        14px;
-}
-
-
-.confirm-row:last-child {
-    border-bottom:
-        0;
-}
-
-
-.confirm-row span {
-    color:
-        #7890a3;
+    margin-bottom: 15px;
 }
 
 
 .confirm-buttons {
-    display:
-        grid;
 
-    grid-template-columns:
-        1fr 1fr;
+    display: flex;
 
-    gap:
-        10px;
+    gap: 8px;
+
+    margin-top: 15px;
 }
 
 
-.confirm-yes,
-.confirm-no {
-    min-height:
-        48px;
+.confirm-buttons button {
 
-    border-radius:
-        12px;
+    flex: 1;
 
-    cursor:
-        pointer;
+    padding: 12px;
 
-    font-weight:
-        800;
+    border: none;
 
-    font-size:
-        14px;
+    border-radius: 11px;
+
+    font-family: inherit;
+
+    cursor: pointer;
 }
 
 
 .confirm-yes {
-    border:
-        1px solid #2e855f;
 
     background:
-        #123d2c;
+        var(--primary);
 
-    color:
-        #7be0af;
+    color: white;
 }
 
 
 .confirm-no {
-    border:
-        1px solid #4c3d42;
 
     background:
-        #241d20;
+        var(--input);
 
     color:
-        #e6c9cf;
+        var(--text);
+
+    border:
+        1px solid var(--border) !important;
 }
 
 
-/* =================================
-   الفوتر
-================================= */
+/* ==================================================
+   الهاتف
+================================================== */
 
-.footer {
-    padding:
-        25px;
+@media (max-width: 700px) {
 
-    text-align:
-        center;
+    .header {
 
-    color:
-        #8fa4b7;
-
-    font-size:
-        14px;
-}
+        padding:
+            24px 15px 20px;
+    }
 
 
-/* =================================
-   إخفاء
-================================= */
+    .brand h1 {
 
-.hidden {
-    display:
-        none !important;
-}
+        font-size: 28px;
+    }
 
 
-/* =================================
-   الجوال
-================================= */
+    .brand p {
 
-@media (max-width: 600px) {
-
-    .top-header {
-        padding-top:
-            28px;
+        font-size: 12px;
     }
 
 
     .theme-button {
-        top:
-            18px;
 
-        left:
-            15px;
+        left: 14px;
+
+        top: 24px;
+
+        width: 42px;
+
+        height: 42px;
+    }
+
+
+    .container {
+
+        padding:
+            5px 12px 25px;
     }
 
 
     .card {
-        padding:
-            16px;
 
-        border-radius:
+        padding:
             18px;
+
+        border-radius: 18px;
     }
 
 
-    .services-grid {
-        grid-template-columns:
-            1fr 1fr 1fr;
+    .services {
 
-        gap:
-            7px;
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 7px;
     }
 
 
     .service {
-        min-height:
-            112px;
+
+        min-height: 92px;
 
         padding:
-            7px;
+            9px 3px;
     }
 
 
-    .service-image {
-        width:
-            50px;
+    .service-logo {
 
-        height:
-            50px;
-    }
+        width: 38px;
 
+        height: 38px;
 
-    .service-image img {
-        width:
-            48px;
-
-        height:
-            48px;
+        margin-bottom: 7px;
     }
 
 
     .service span {
-        font-size:
-            13px;
+
+        font-size: 11px;
     }
 
 
-    .payment-type {
-        font-size:
-            14px;
+    .payment-types {
+
+        grid-template-columns: 1fr;
     }
 
 
-    .confirm-buttons {
-        grid-template-columns:
-            1fr;
+    .ussd-code {
+
+        font-size: 17px;
+    }
+
+
+    .developer-card {
+
+        margin-top: 20px;
+
+        padding:
+            18px 10px;
+    }
+
+
+    .developer-title {
+
+        font-size: 14px;
+    }
+
+
+    .developer-subtitle {
+
+        font-size: 11px;
+    }
+
+}
+
+
+/* ==================================================
+   الهواتف الصغيرة جدًا
+================================================== */
+
+@media (max-width: 400px) {
+
+    .brand h1 {
+
+        font-size: 25px;
+    }
+
+
+    .card {
+
+        padding: 15px;
+    }
+
+
+    .service {
+
+        min-height: 87px;
+    }
+
+
+    .service-logo {
+
+        width: 34px;
+
+        height: 34px;
+    }
+
+
+    .service span {
+
+        font-size: 10px;
     }
 
 }

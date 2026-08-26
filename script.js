@@ -1,7 +1,7 @@
-/* =========================================
+/* ==================================================
    تطبيق الكود الوسيط
    script.js
-========================================= */
+================================================== */
 
 let selectedService = "";
 let selectedPayment = "";
@@ -9,40 +9,29 @@ let selectedPayment = "";
 let currentUSSD = "";
 let pendingCallHref = "";
 
-const HISTORY_KEY =
-    "alkod_alwasit_history";
-
-const THEME_KEY =
-    "alkod_alwasit_theme";
+const HISTORY_KEY = "alkod_alwasit_history";
+const THEME_KEY = "alkod_alwasit_theme";
 
 
-/* =========================================
+/* ==================================================
    أسماء الخدمات
-========================================= */
+================================================== */
 
 const serviceNames = {
-
     jawwal: "جوال بي",
-
     palpay: "بال بي",
-
     bank: "بنك فلسطين"
-
 };
-
 
 const paymentNames = {
-
     friend: "الدفع لصديق",
-
     merchant: "الدفع لتاجر"
-
 };
 
 
-/* =========================================
+/* ==================================================
    العناصر
-========================================= */
+================================================== */
 
 const serviceButtons =
     document.querySelectorAll(".service");
@@ -83,6 +72,9 @@ const ussdCode =
 const callButton =
     document.getElementById("callButton");
 
+const copyButton =
+    document.getElementById("copyButton");
+
 const historyToggle =
     document.getElementById("historyToggle");
 
@@ -96,9 +88,7 @@ const historyContainer =
     document.getElementById("historyContainer");
 
 const clearHistoryButton =
-    document.getElementById(
-        "clearHistoryButton"
-    );
+    document.getElementById("clearHistoryButton");
 
 const themeButton =
     document.getElementById("themeButton");
@@ -107,63 +97,41 @@ const confirmModal =
     document.getElementById("confirmModal");
 
 const confirmCallButton =
-    document.getElementById(
-        "confirmCallButton"
-    );
+    document.getElementById("confirmCallButton");
 
 const cancelCallButton =
-    document.getElementById(
-        "cancelCallButton"
-    );
+    document.getElementById("cancelCallButton");
 
 const confirmService =
-    document.getElementById(
-        "confirmService"
-    );
+    document.getElementById("confirmService");
 
 const confirmPayment =
-    document.getElementById(
-        "confirmPayment"
-    );
+    document.getElementById("confirmPayment");
 
 const confirmReceiver =
-    document.getElementById(
-        "confirmReceiver"
-    );
+    document.getElementById("confirmReceiver");
 
 const confirmAmount =
-    document.getElementById(
-        "confirmAmount"
-    );
+    document.getElementById("confirmAmount");
 
 const confirmPaymentRow =
-    document.getElementById(
-        "confirmPaymentRow"
-    );
+    document.getElementById("confirmPaymentRow");
 
 const confirmReceiverRow =
-    document.getElementById(
-        "confirmReceiverRow"
-    );
+    document.getElementById("confirmReceiverRow");
 
 const confirmAmountRow =
-    document.getElementById(
-        "confirmAmountRow"
-    );
+    document.getElementById("confirmAmountRow");
 
 
-/* =========================================
-   أدوات
-========================================= */
+/* ==================================================
+   أدوات مساعدة
+================================================== */
 
 function showElement(element) {
 
     if (element) {
-
-        element.classList.remove(
-            "hidden"
-        );
-
+        element.classList.remove("hidden");
     }
 
 }
@@ -172,11 +140,7 @@ function showElement(element) {
 function hideElement(element) {
 
     if (element) {
-
-        element.classList.add(
-            "hidden"
-        );
-
+        element.classList.add("hidden");
     }
 
 }
@@ -200,155 +164,99 @@ function cleanAmount(value) {
 }
 
 
-/* =========================================
+/* ==================================================
    اختيار جهة التحويل
-========================================= */
+================================================== */
 
 serviceButtons.forEach(button => {
 
-    button.addEventListener(
-        "click",
-        () => {
+    button.addEventListener("click", () => {
 
-            serviceButtons.forEach(
-                item => {
+        serviceButtons.forEach(item => {
+            item.classList.remove("active");
+        });
 
-                    item.classList.remove(
-                        "active"
-                    );
+        button.classList.add("active");
 
-                }
-            );
+        selectedService =
+            button.dataset.service || "";
 
+        updateServiceFields();
 
-            button.classList.add(
-                "active"
-            );
-
-
-            selectedService =
-                button.dataset.service || "";
-
-
-            updateServiceFields();
-
-        }
-    );
+    });
 
 });
 
 
-/* =========================================
+/* ==================================================
    اختيار طريقة الدفع
-========================================= */
+================================================== */
 
 paymentButtons.forEach(button => {
 
-    button.addEventListener(
-        "click",
-        () => {
+    button.addEventListener("click", () => {
 
-            if (
-                selectedService === "bank"
-            ) {
-
-                alert(
-                    "الدفع بهذه الطريقة غير متاح لبنك فلسطين."
-                );
-
-                return;
-
-            }
-
-
-            paymentButtons.forEach(
-                item => {
-
-                    item.classList.remove(
-                        "active"
-                    );
-
-                }
-            );
-
-
-            button.classList.add(
-                "active"
-            );
-
-
-            selectedPayment =
-                button.dataset.type || "";
-
+        if (selectedService === "bank") {
+            return;
         }
-    );
+
+        paymentButtons.forEach(item => {
+            item.classList.remove("active");
+        });
+
+        button.classList.add("active");
+
+        selectedPayment =
+            button.dataset.type || "";
+
+    });
 
 });
 
 
-/* =========================================
-   تحديث الحقول
-========================================= */
+/* ==================================================
+   تحديث الحقول حسب الخدمة
+================================================== */
 
 function updateServiceFields() {
 
-    if (
-        selectedService === "bank"
-    ) {
+    if (selectedService === "bank") {
 
-        hideElement(
-            receiverGroup
-        );
+        hideElement(receiverGroup);
+        hideElement(amountGroup);
+        hideElement(notesGroup);
 
-        hideElement(
-            amountGroup
-        );
-
-        hideElement(
-            notesGroup
-        );
-
-
-        paymentButtons.forEach(
-            button => {
-
-                button.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
+        paymentButtons.forEach(button => {
+            button.classList.remove("active");
+        });
 
         selectedPayment = "";
-
 
         return;
     }
 
-
-    showElement(
-        receiverGroup
-    );
-
-    showElement(
-        amountGroup
-    );
-
-    showElement(
-        notesGroup
-    );
+    showElement(receiverGroup);
+    showElement(amountGroup);
+    showElement(notesGroup);
 
 }
 
 
-/* =========================================
-   كود جوال بي
-========================================= */
+/* ==================================================
+   إنشاء كود جوال بي
+================================================== */
 
-function buildJawwalCode(
-    password
-) {
+/*
+   جوال بي - الدفع لصديق:
+
+   *110*1*الرقم السري*رقم المستلم*المبلغ#
+
+   جوال بي - الدفع لتاجر:
+
+   *110*2*الرقم السري*رقم المستلم*المبلغ#
+*/
+
+function buildJawwalCode(password) {
 
     const cleanPassword =
         cleanNumber(password);
@@ -363,16 +271,7 @@ function buildJawwalCode(
             amountInput.value
         );
 
-
-    /*
-       الدفع لصديق
-
-       *110*1*الرقم السري*رقم المستلم*المبلغ#
-    */
-
-    if (
-        selectedPayment === "friend"
-    ) {
+    if (selectedPayment === "friend") {
 
         return (
             "*110*1*" +
@@ -386,16 +285,7 @@ function buildJawwalCode(
 
     }
 
-
-    /*
-       الدفع لتاجر
-
-       *110*2*الرقم السري*رقم المستلم*المبلغ#
-    */
-
-    if (
-        selectedPayment === "merchant"
-    ) {
+    if (selectedPayment === "merchant") {
 
         return (
             "*110*2*" +
@@ -409,15 +299,24 @@ function buildJawwalCode(
 
     }
 
-
     return "";
 
 }
 
 
-/* =========================================
-   كود بال بي
-========================================= */
+/* ==================================================
+   إنشاء كود بال بي
+================================================== */
+
+/*
+   بال بي - الدفع لصديق:
+
+   *370*1*1*رقم المستلم*المبلغ#
+
+   بال بي - الدفع لتاجر:
+
+   *370*1*2*رقم المستلم*المبلغ#
+*/
 
 function buildPalPayCode() {
 
@@ -431,26 +330,73 @@ function buildPalPayCode() {
             amountInput.value
         );
 
+    if (selectedPayment === "friend") {
 
-    /*
-       هذا الجزء حافظنا عليه
-       كما كان في النسخة السابقة.
-    */
+        return (
+            "*370*1*1*" +
+            receiver +
+            "*" +
+            amount +
+            "#"
+        );
 
-    return (
-        "*600*" +
-        receiver +
-        "*" +
-        amount +
-        "#"
-    );
+    }
+
+    if (selectedPayment === "merchant") {
+
+        return (
+            "*370*1*2*" +
+            receiver +
+            "*" +
+            amount +
+            "#"
+        );
+
+    }
+
+    return "";
 
 }
 
 
-/* =========================================
+/* ==================================================
+   بنك فلسطين
+================================================== */
+
+function buildBankCode() {
+
+    return "*267#";
+
+}
+
+
+/* ==================================================
+   تحديث زر تنفيذ التحويل
+================================================== */
+
+function updateCallButton() {
+
+    if (!callButton) {
+        return;
+    }
+
+    if (!currentUSSD) {
+
+        callButton.removeAttribute("href");
+
+        return;
+    }
+
+    callButton.href =
+        "tel:" +
+        currentUSSD;
+
+}
+
+
+/* ==================================================
    إنشاء العملية
-========================================= */
+================================================== */
 
 function createCode() {
 
@@ -461,46 +407,41 @@ function createCode() {
         );
 
         return;
-
     }
 
 
-    /*
+    /* =========================================
        بنك فلسطين
-    */
+    ========================================= */
 
-    if (
-        selectedService === "bank"
-    ) {
+    if (selectedService === "bank") {
 
-        currentUSSD = "";
-
-        resultMessage.textContent =
-            "سيتم تنفيذ الاتصال المباشر.";
-
-        ussdCode.textContent =
-            "اتصال مباشر";
+        currentUSSD =
+            buildBankCode();
 
         pendingCallHref =
-            "tel:";
+            "tel:" +
+            currentUSSD;
 
+        ussdCode.textContent =
+            currentUSSD;
 
-        showElement(
-            resultSection
-        );
+        resultMessage.textContent =
+            "سيتم الاتصال بكود بنك فلسطين.";
 
+        updateCallButton();
+
+        showElement(resultSection);
 
         openConfirmation();
 
-
         return;
-
     }
 
 
-    /*
+    /* =========================================
        طريقة الدفع
-    */
+    ========================================= */
 
     if (!selectedPayment) {
 
@@ -509,7 +450,6 @@ function createCode() {
         );
 
         return;
-
     }
 
 
@@ -533,7 +473,6 @@ function createCode() {
         receiverInput.focus();
 
         return;
-
     }
 
 
@@ -549,41 +488,41 @@ function createCode() {
         amountInput.focus();
 
         return;
-
     }
 
 
-    /*
+    /* =========================================
        جوال بي
-       الرقم السري لا يظهر هنا.
-    */
+    ========================================= */
 
-    if (
-        selectedService === "jawwal"
-    ) {
+    if (selectedService === "jawwal") {
 
         currentUSSD = "";
 
         ussdCode.textContent =
-            "سيُطلب الرقم السري عند تأكيد الاتصال.";
+            "سيُطلب الرقم السري";
 
         resultMessage.textContent =
-            "تم تجهيز العملية. اضغط تأكيد الاتصال لإدخال الرقم السري.";
+            "بعد التأكيد سيُطلب منك الرقم السري لجوال بي.";
 
+        updateCallButton();
+
+        showElement(resultSection);
+
+        openConfirmation();
+
+        return;
     }
 
 
-    /*
+    /* =========================================
        بال بي
-    */
+    ========================================= */
 
-    else if (
-        selectedService === "palpay"
-    ) {
+    if (selectedService === "palpay") {
 
         currentUSSD =
             buildPalPayCode();
-
 
         if (!currentUSSD) {
 
@@ -592,9 +531,11 @@ function createCode() {
             );
 
             return;
-
         }
 
+        pendingCallHref =
+            "tel:" +
+            currentUSSD;
 
         ussdCode.textContent =
             currentUSSD;
@@ -602,29 +543,20 @@ function createCode() {
         resultMessage.textContent =
             "تم تجهيز كود العملية.";
 
+        updateCallButton();
 
-        pendingCallHref =
-            "tel:" +
-            encodeURIComponent(
-                currentUSSD
-            );
+        showElement(resultSection);
+
+        openConfirmation();
 
     }
-
-
-    showElement(
-        resultSection
-    );
-
-
-    openConfirmation();
 
 }
 
 
-/* =========================================
+/* ==================================================
    زر إنشاء العملية
-========================================= */
+================================================== */
 
 if (createButton) {
 
@@ -636,9 +568,9 @@ if (createButton) {
 }
 
 
-/* =========================================
+/* ==================================================
    نافذة التأكيد
-========================================= */
+================================================== */
 
 function openConfirmation() {
 
@@ -646,10 +578,8 @@ function openConfirmation() {
         return;
     }
 
-
     confirmService.textContent =
-        serviceNames[selectedService] ||
-        "-";
+        serviceNames[selectedService] || "-";
 
 
     if (selectedPayment) {
@@ -659,8 +589,7 @@ function openConfirmation() {
         );
 
         confirmPayment.textContent =
-            paymentNames[selectedPayment] ||
-            "-";
+            paymentNames[selectedPayment] || "-";
 
     } else {
 
@@ -687,9 +616,7 @@ function openConfirmation() {
         );
 
 
-    if (
-        selectedService === "bank"
-    ) {
+    if (selectedService === "bank") {
 
         hideElement(
             confirmReceiverRow
@@ -709,10 +636,8 @@ function openConfirmation() {
             confirmAmountRow
         );
 
-
         confirmReceiver.textContent =
             receiver || "-";
-
 
         confirmAmount.textContent =
             amount
@@ -722,49 +647,39 @@ function openConfirmation() {
     }
 
 
-    showElement(
-        confirmModal
-    );
+    showElement(confirmModal);
 
 }
 
 
-/* =========================================
-   إغلاق التأكيد
-========================================= */
+/* ==================================================
+   إغلاق نافذة التأكيد
+================================================== */
 
 function closeConfirmation() {
 
-    hideElement(
-        confirmModal
-    );
+    hideElement(confirmModal);
 
 }
 
 
-/* =========================================
-   نافذة الرقم السري
-========================================= */
+/* ==================================================
+   نافذة الرقم السري لجوال بي
+================================================== */
 
 function askForJawwalPassword() {
 
     return new Promise(resolve => {
 
         const modal =
-            document.createElement(
-                "div"
-            );
-
+            document.createElement("div");
 
         modal.className =
             "confirm-modal";
 
-
         modal.innerHTML = `
 
-            <div
-                class="confirm-overlay"
-            ></div>
+            <div class="confirm-overlay"></div>
 
             <div class="confirm-box">
 
@@ -777,7 +692,7 @@ function askForJawwalPassword() {
                 </h2>
 
                 <p class="confirm-text">
-                    أدخل الرقم السري لجوال بي لإكمال الاتصال
+                    أدخل الرقم السري لجوال بي لإكمال الاتصال.
                 </p>
 
                 <div
@@ -798,16 +713,6 @@ function askForJawwalPassword() {
                         autocomplete="off"
                         maxlength="20"
                         placeholder="أدخل الرقم السري"
-                        style="
-                            width:100%;
-                            padding:14px;
-                            border-radius:12px;
-                            border:1px solid #25465c;
-                            background:#07151f;
-                            color:white;
-                            outline:none;
-                            font-size:16px;
-                        "
                     >
 
                 </div>
@@ -833,12 +738,11 @@ function askForJawwalPassword() {
                 </div>
 
             </div>
+
         `;
 
 
-        document.body.appendChild(
-            modal
-        );
+        document.body.appendChild(modal);
 
 
         const passwordInput =
@@ -846,18 +750,15 @@ function askForJawwalPassword() {
                 "#jawwalPasswordInput"
             );
 
-
         const confirmButton =
             modal.querySelector(
                 "#jawwalPasswordConfirm"
             );
 
-
         const cancelButton =
             modal.querySelector(
                 "#jawwalPasswordCancel"
             );
-
 
         const overlay =
             modal.querySelector(
@@ -865,22 +766,14 @@ function askForJawwalPassword() {
             );
 
 
-        setTimeout(
-            () => {
+        setTimeout(() => {
 
-                passwordInput.focus();
+            passwordInput.focus();
 
-            },
-            100
-        );
+        }, 100);
 
 
         function finish(value) {
-
-            /*
-               حذف النافذة مباشرة.
-               الرقم السري لا يتم تخزينه.
-            */
 
             modal.remove();
 
@@ -898,7 +791,6 @@ function askForJawwalPassword() {
                         passwordInput.value
                     );
 
-
                 if (!password) {
 
                     alert(
@@ -908,9 +800,7 @@ function askForJawwalPassword() {
                     passwordInput.focus();
 
                     return;
-
                 }
-
 
                 finish(password);
 
@@ -942,18 +832,13 @@ function askForJawwalPassword() {
             "keydown",
             event => {
 
-                if (
-                    event.key === "Enter"
-                ) {
+                if (event.key === "Enter") {
 
                     confirmButton.click();
 
                 }
 
-
-                if (
-                    event.key === "Escape"
-                ) {
+                if (event.key === "Escape") {
 
                     finish(null);
 
@@ -967,9 +852,9 @@ function askForJawwalPassword() {
 }
 
 
-/* =========================================
+/* ==================================================
    تأكيد الاتصال
-========================================= */
+================================================== */
 
 if (confirmCallButton) {
 
@@ -978,13 +863,12 @@ if (confirmCallButton) {
         async () => {
 
 
-            /* =========================
+            /* =================================
                جوال بي
-            ========================= */
+            ================================= */
 
             if (
-                selectedService ===
-                "jawwal"
+                selectedService === "jawwal"
             ) {
 
                 closeConfirmation();
@@ -995,16 +879,9 @@ if (confirmCallButton) {
 
 
                 if (!password) {
-
                     return;
-
                 }
 
-
-                /*
-                   إنشاء كود جوال بي
-                   بعد إدخال الرقم السري فقط
-                */
 
                 currentUSSD =
                     buildJawwalCode(
@@ -1019,27 +896,27 @@ if (confirmCallButton) {
                     );
 
                     return;
-
                 }
 
 
                 pendingCallHref =
                     "tel:" +
-                    encodeURIComponent(
-                        currentUSSD
-                    );
+                    currentUSSD;
 
 
-                /*
-                   لا يتم حفظ الرقم السري.
-                */
+                ussdCode.textContent =
+                    currentUSSD;
+
+
+                resultMessage.textContent =
+                    "تم تجهيز كود الاتصال.";
+
+
+                updateCallButton();
+
 
                 saveHistory();
 
-
-                /*
-                   الاتصال
-                */
 
                 window.location.href =
                     pendingCallHref;
@@ -1050,34 +927,38 @@ if (confirmCallButton) {
             }
 
 
-            /* =========================
+            /* =================================
                بنك فلسطين
-            ========================= */
+            ================================= */
 
             if (
-                selectedService ===
-                "bank"
+                selectedService === "bank"
             ) {
 
                 closeConfirmation();
 
 
+                currentUSSD =
+                    buildBankCode();
+
+
+                pendingCallHref =
+                    "tel:" +
+                    currentUSSD;
+
+
+                ussdCode.textContent =
+                    currentUSSD;
+
+
+                updateCallButton();
+
+
                 saveHistory();
 
 
-                /*
-                   لا نضع رقمًا سريًا
-                   أو بيانات غير مطلوبة.
-                */
-
-                /*
-                   لا يوجد رقم اتصال لبنك فلسطين
-                   مخزن هنا لأن الرقم لم يتم تحديده.
-                */
-
-                alert(
-                    "تم تأكيد العملية."
-                );
+                window.location.href =
+                    pendingCallHref;
 
 
                 return;
@@ -1085,29 +966,36 @@ if (confirmCallButton) {
             }
 
 
-            /* =========================
+            /* =================================
                بال بي
-            ========================= */
+            ================================= */
 
             if (
-                selectedService ===
-                "palpay"
+                selectedService === "palpay"
             ) {
 
                 closeConfirmation();
 
 
-                if (
-                    pendingCallHref
-                ) {
+                if (!currentUSSD) {
 
-                    saveHistory();
+                    alert(
+                        "لم يتم إنشاء كود العملية."
+                    );
 
-
-                    window.location.href =
-                        pendingCallHref;
+                    return;
 
                 }
+
+
+                updateCallButton();
+
+
+                saveHistory();
+
+
+                window.location.href =
+                    pendingCallHref;
 
             }
 
@@ -1117,9 +1005,9 @@ if (confirmCallButton) {
 }
 
 
-/* =========================================
+/* ==================================================
    زر الإلغاء
-========================================= */
+================================================== */
 
 if (cancelCallButton) {
 
@@ -1131,9 +1019,117 @@ if (cancelCallButton) {
 }
 
 
-/* =========================================
-   السجل
-========================================= */
+/* ==================================================
+   نسخ كود USSD
+================================================== */
+
+if (copyButton) {
+
+    copyButton.addEventListener(
+        "click",
+        async () => {
+
+            if (!currentUSSD) {
+
+                alert(
+                    "لا يوجد كود لنسخه."
+                );
+
+                return;
+            }
+
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    currentUSSD
+                );
+
+
+                const oldText =
+                    copyButton.textContent;
+
+
+                copyButton.textContent =
+                    "✓ تم نسخ الكود";
+
+
+                setTimeout(() => {
+
+                    copyButton.textContent =
+                        oldText;
+
+                }, 1800);
+
+            } catch (error) {
+
+                const temp =
+                    document.createElement(
+                        "textarea"
+                    );
+
+
+                temp.value =
+                    currentUSSD;
+
+
+                temp.style.position =
+                    "fixed";
+
+                temp.style.opacity =
+                    "0";
+
+
+                document.body.appendChild(
+                    temp
+                );
+
+
+                temp.focus();
+
+                temp.select();
+
+
+                try {
+
+                    document.execCommand(
+                        "copy"
+                    );
+
+
+                    copyButton.textContent =
+                        "✓ تم نسخ الكود";
+
+
+                    setTimeout(() => {
+
+                        copyButton.textContent =
+                            "📋 نسخ الكود";
+
+                    }, 1800);
+
+                } catch (copyError) {
+
+                    alert(
+                        "تعذر نسخ الكود تلقائيًا. يمكنك تحديده ونسخه يدويًا."
+                    );
+
+                }
+
+
+                temp.remove();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   سجل الحركات
+================================================== */
 
 function getHistory() {
 
@@ -1146,9 +1142,7 @@ function getHistory() {
 
 
         if (!saved) {
-
             return [];
-
         }
 
 
@@ -1156,12 +1150,8 @@ function getHistory() {
             JSON.parse(saved);
 
 
-        if (
-            !Array.isArray(data)
-        ) {
-
+        if (!Array.isArray(data)) {
             return [];
-
         }
 
 
@@ -1181,9 +1171,9 @@ function getHistory() {
 }
 
 
-/* =========================================
+/* ==================================================
    حفظ الحركة
-========================================= */
+================================================== */
 
 function saveHistory() {
 
@@ -1231,17 +1221,8 @@ function saveHistory() {
                 ? notesInput.value.trim()
                 : "",
 
-        /*
-           مهم:
-           لا يتم حفظ الرقم السري.
-        */
-
         code:
             currentUSSD,
-
-        /*
-           حالة العملية
-        */
 
         status:
             "تمت العملية",
@@ -1257,16 +1238,11 @@ function saveHistory() {
     };
 
 
-    history.unshift(
-        item
-    );
+    history.unshift(item);
 
 
     const limitedHistory =
-        history.slice(
-            0,
-            100
-        );
+        history.slice(0, 100);
 
 
     try {
@@ -1293,16 +1269,14 @@ function saveHistory() {
 }
 
 
-/* =========================================
+/* ==================================================
    عرض السجل
-========================================= */
+================================================== */
 
 function renderHistory() {
 
     if (!historyContainer) {
-
         return;
-
     }
 
 
@@ -1310,9 +1284,7 @@ function renderHistory() {
         getHistory();
 
 
-    if (
-        history.length === 0
-    ) {
+    if (history.length === 0) {
 
         historyContainer.innerHTML = `
 
@@ -1323,7 +1295,6 @@ function renderHistory() {
         `;
 
         return;
-
     }
 
 
@@ -1368,8 +1339,7 @@ function renderHistory() {
 
                                     <small>
                                         ${escapeHTML(
-                                            item.date ||
-                                            ""
+                                            item.date || ""
                                         )}
                                     </small>
 
@@ -1412,8 +1382,7 @@ function renderHistory() {
 
                                     <strong>
                                         ${escapeHTML(
-                                            item.serviceName ||
-                                            "-"
+                                            item.serviceName || "-"
                                         )}
                                     </strong>
 
@@ -1570,9 +1539,9 @@ function renderHistory() {
 }
 
 
-/* =========================================
+/* ==================================================
    أحداث السجل
-========================================= */
+================================================== */
 
 function attachHistoryEvents() {
 
@@ -1623,8 +1592,7 @@ function attachHistoryEvents() {
 
                     const id =
                         Number(
-                            deleteButton
-                                .dataset
+                            deleteButton.dataset
                                 .deleteId
                         );
 
@@ -1641,9 +1609,9 @@ function attachHistoryEvents() {
 }
 
 
-/* =========================================
+/* ==================================================
    حذف حركة
-========================================= */
+================================================== */
 
 function deleteHistory(id) {
 
@@ -1663,16 +1631,12 @@ function deleteHistory(id) {
 
         localStorage.setItem(
             HISTORY_KEY,
-            JSON.stringify(
-                filtered
-            )
+            JSON.stringify(filtered)
         );
 
     } catch (error) {
 
-        console.log(
-            error
-        );
+        console.log(error);
 
     }
 
@@ -1682,9 +1646,9 @@ function deleteHistory(id) {
 }
 
 
-/* =========================================
+/* ==================================================
    حذف كل السجل
-========================================= */
+================================================== */
 
 if (clearHistoryButton) {
 
@@ -1696,16 +1660,13 @@ if (clearHistoryButton) {
                 getHistory();
 
 
-            if (
-                history.length === 0
-            ) {
+            if (history.length === 0) {
 
                 alert(
                     "السجل فارغ بالفعل."
                 );
 
                 return;
-
             }
 
 
@@ -1716,9 +1677,7 @@ if (clearHistoryButton) {
 
 
             if (!confirmed) {
-
                 return;
-
             }
 
 
@@ -1735,15 +1694,20 @@ if (clearHistoryButton) {
 }
 
 
-/* =========================================
-   فتح السجل
-========================================= */
+/* ==================================================
+   فتح وإغلاق السجل
+================================================== */
 
 if (historyToggle) {
 
     historyToggle.addEventListener(
         "click",
         () => {
+
+            if (!historyCard) {
+                return;
+            }
+
 
             historyCard.classList.toggle(
                 "open"
@@ -1767,9 +1731,9 @@ if (historyToggle) {
 }
 
 
-/* =========================================
-   الوضع الليلي
-========================================= */
+/* ==================================================
+   الوضع الليلي والفاتح
+================================================== */
 
 function loadTheme() {
 
@@ -1779,17 +1743,19 @@ function loadTheme() {
         );
 
 
-    if (
-        savedTheme === "light"
-    ) {
+    if (savedTheme === "light") {
 
         document.body.classList.add(
             "light-mode"
         );
 
 
-        themeButton.textContent =
-            "🌙";
+        if (themeButton) {
+
+            themeButton.textContent =
+                "🌙";
+
+        }
 
     } else {
 
@@ -1798,8 +1764,12 @@ function loadTheme() {
         );
 
 
-        themeButton.textContent =
-            "☀️";
+        if (themeButton) {
+
+            themeButton.textContent =
+                "☀️";
+
+        }
 
     }
 
@@ -1842,9 +1812,9 @@ if (themeButton) {
 }
 
 
-/* =========================================
+/* ==================================================
    حماية النصوص
-========================================= */
+================================================== */
 
 function escapeHTML(value) {
 
@@ -1873,17 +1843,15 @@ function escapeHTML(value) {
 }
 
 
-/* =========================================
+/* ==================================================
    زر Escape
-========================================= */
+================================================== */
 
 document.addEventListener(
     "keydown",
     event => {
 
-        if (
-            event.key === "Escape"
-        ) {
+        if (event.key === "Escape") {
 
             closeConfirmation();
 
@@ -1893,9 +1861,9 @@ document.addEventListener(
 );
 
 
-/* =========================================
+/* ==================================================
    التشغيل
-========================================= */
+================================================== */
 
 loadTheme();
 
@@ -1903,14 +1871,14 @@ renderHistory();
 
 updateServiceFields();
 
+updateCallButton();
 
-/* =========================================
+
+/* ==================================================
    Service Worker
-========================================= */
+================================================== */
 
-if (
-    "serviceWorker" in navigator
-) {
+if ("serviceWorker" in navigator) {
 
     window.addEventListener(
         "load",
