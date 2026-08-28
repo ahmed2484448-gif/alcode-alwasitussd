@@ -2,480 +2,726 @@
 <html lang="ar" dir="rtl">
 
 <head>
-
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-    <meta
-        name="theme-color"
-        content="#071119">
+    <meta name="theme-color" content="#071119">
 
-    <meta
-        name="description"
-        content="تطبيق الكود الوسيط لتحويل الأموال عبر خدمات الدفع">
+    <meta name="description"
+        content="تطبيق الكود الوسيط - أداة بسيطة للتحويل عبر خدمات الدفع">
 
     <title>تطبيق الكود الوسيط</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css">
+    <link rel="stylesheet" href="style.css">
 
-    <link
-        rel="manifest"
-        href="manifest.json">
-
+    <link rel="manifest" href="manifest.json">
 </head>
-
 
 <body>
 
+    <!-- =========================
+         الرأس
+    ========================== -->
 
-    <!-- ==============================
-         رأس التطبيق
-    =============================== -->
+    <header class="top-header">
 
-    <header class="header">
+        <div class="header-content">
 
-        <div class="brand">
+            <div class="brand">
 
-            <h1>
-                تطبيق الكود الوسيط
-            </h1>
+                <div class="app-icon">
+                    <span>USSD</span>
+                </div>
 
-            <p>
-                صدقة جارية عن روح شهداء عائلة فرج الله
-            </p>
+                <div>
+                    <h1>الكـــود الوسيـــط</h1>
 
-        </div>
-
-
-        <button
-            id="themeButton"
-            class="theme-button"
-            type="button"
-            aria-label="تغيير الوضع">
-
-            ☀️
-
-        </button>
-
-    </header>
-
-
-
-    <main class="container">
-
-
-        <!-- ==============================
-             خدمات الدفع
-        =============================== -->
-
-        <section class="card">
-
-            <h2>
-                اختر خدمة الدفع
-            </h2>
-
-
-            <div class="services">
-
-
-                <button
-                    class="service"
-                    data-service="jawwal"
-                    type="button">
-
-                    <img
-                        src="images/1.png"
-                        alt="جوال بي"
-                        class="service-logo">
-
-                    <span>
-                        جوال بي
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    class="service"
-                    data-service="palpay"
-                    type="button">
-
-                    <img
-                        src="images/2.png"
-                        alt="بال بي"
-                        class="service-logo">
-
-                    <span>
-                        بال بي
-                    </span>
-
-                </button>
-
-
-
-                <button
-                    class="service"
-                    data-service="bank"
-                    type="button">
-
-                    <img
-                        src="images/3.png"
-                        alt="بنك فلسطين"
-                        class="service-logo">
-
-                    <span>
-                        بنك فلسطين
-                    </span>
-
-                </button>
-
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ==============================
-             طريقة الدفع
-        =============================== -->
-
-        <section id="paymentSection" class="card">
-
-            <h2>
-                اختر طريقة الدفع
-            </h2>
-
-
-            <div class="payment-types">
-
-
-                <button
-                    class="payment-type"
-                    data-type="friend"
-                    type="button">
-
-                    👤
-                    الدفع لصديق
-
-                </button>
-
-
-                <button
-                    class="payment-type"
-                    data-type="merchant"
-                    type="button">
-
-                    🏪
-                    الدفع لتاجر
-
-                </button>
-
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ==============================
-             بيانات العملية
-        =============================== -->
-
-        <section class="card">
-
-
-            <div
-                id="receiverGroup"
-                class="input-group">
-
-                <label for="receiver">
-                    رقم المستلم
-                </label>
-
-
-                <input
-                    id="receiver"
-                    type="tel"
-                    inputmode="numeric"
-                    autocomplete="off"
-                    placeholder="أدخل رقم المستلم">
-
-            </div>
-
-
-
-            <div
-                id="amountGroup"
-                class="input-group">
-
-                <label for="amount">
-
-                    المبلغ
-
-                    <span>
-                        (بالشيكل)
-                    </span>
-
-                </label>
-
-
-                <input
-                    id="amount"
-                    type="number"
-                    inputmode="decimal"
-                    min="1"
-                    step="0.01"
-                    placeholder="مثال: 50">
-
-            </div>
-
-
-
-            <div
-                id="notesGroup"
-                class="input-group">
-
-                <label for="notes">
-
-                    ملاحظات
-
-                    <span>
-                        (اختياري)
-                    </span>
-
-                </label>
-
-
-                <textarea
-                    id="notes"
-                    rows="3"
-                    placeholder="اكتب ملاحظة إن وجدت..."></textarea>
-
-            </div>
-
-
-
-            <button
-                id="createButton"
-                class="create-button"
-                type="button">
-
-                إنشاء الكود وإكمال العملية
-
-            </button>
-
-        </section>
-
-
-
-        <!-- ==============================
-             نتيجة العملية
-        =============================== -->
-
-        <section
-            id="resultSection"
-            class="card result hidden">
-
-
-            <h2>
-                كود العملية
-            </h2>
-
-
-            <div
-                id="ussdCode"
-                class="ussd-code">
-
-                -
-
-            </div>
-
-
-            <p id="resultMessage">
-            </p>
-
-
-            <div class="result-buttons">
-
-
-                <button
-                    id="copyButton"
-                    class="secondary-button"
-                    type="button">
-
-                    📋 نسخ الكود
-
-                </button>
-
-
-                <a
-                    id="callButton"
-                    class="call-button"
-                    href="#">
-
-                    📞 تنفيذ التحويل
-
-                </a>
-
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ==============================
-             سجل الحركات
-        =============================== -->
-
-        <section
-            class="card history-card">
-
-
-            <div class="history-title">
-
-                <h2>
-                    سجل الحركات
-                </h2>
-
-
-                <button
-                    id="clearHistoryButton"
-                    type="button">
-
-                    مسح السجل
-
-                </button>
-
-            </div>
-
-
-            <button
-                id="historyToggle"
-                type="button"
-                aria-expanded="true"
-                class="hidden">
-
-            </button>
-
-
-            <div
-                id="historyPanel"
-                class="history-panel">
-
-                <div id="historyContainer">
-
-                    <div class="empty-history">
-
-                        لا توجد عمليات حتى الآن
-
-                    </div>
+                    <p>
+                        تطبيقك الآمن للتحويل بوقت أسرع و بسهولة
+                    </p>
 
                 </div>
 
             </div>
 
+            <button
+                id="themeButton"
+                class="theme-button"
+                type="button"
+                aria-label="تغيير الوضع">
+                ☀️
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         المحتوى
+    ========================== -->
+
+    <main class="main-content">
+
+
+        <!-- ==========================================
+             صفحة التحويل
+        =========================================== -->
+
+        <section
+            id="transferPage"
+            class="page active-page">
+
+            <div class="page-title">
+
+                <h2>تحويل الأموال</h2>
+
+                <p>
+                    اختر جهة التحويل وأدخل البيانات المطلوبة
+                </p>
+
+            </div>
+
+
+            <!-- خدمة الدفع -->
+
+            <section class="app-card">
+
+                <div class="section-heading">
+
+                    <span class="heading-icon">
+                        ⇄
+                    </span>
+
+                    <div>
+                        <h3>جهة التحويل</h3>
+
+                        <p>
+                            اختر الخدمة التي تريد استخدامها
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="services">
+
+                    <button
+                        class="service"
+                        data-service="jawwal"
+                        type="button">
+
+                        <img
+                            src="images/1.png"
+                            alt="جوال بي"
+                            class="service-logo">
+
+                        <span>
+                            جوال بي
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="service"
+                        data-service="palpay"
+                        type="button">
+
+                        <img
+                            src="images/2.png"
+                            alt="بال بي"
+                            class="service-logo">
+
+                        <span>
+                            بال بي
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="service"
+                        data-service="bank"
+                        type="button">
+
+                        <img
+                            src="images/3.png"
+                            alt="بنك فلسطين"
+                            class="service-logo">
+
+                        <span>
+                            بنك فلسطين
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- طريقة الدفع -->
+
+            <section
+                id="paymentSection"
+                class="app-card">
+
+                <div class="section-heading">
+
+                    <span class="heading-icon">
+                        💳
+                    </span>
+
+                    <div>
+                        <h3>طريقة الدفع</h3>
+
+                        <p>
+                            اختر نوع العملية
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="payment-types">
+
+                    <button
+                        class="payment-type"
+                        data-type="friend"
+                        type="button">
+
+                        <span class="payment-icon">
+                            ♙
+                        </span>
+
+                        <span>
+                            الدفع لصديق
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="payment-type"
+                        data-type="merchant"
+                        type="button">
+
+                        <span class="payment-icon">
+                            ♜
+                        </span>
+
+                        <span>
+                            الدفع لتاجر
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- بيانات التحويل -->
+
+            <section class="app-card">
+
+                <div class="section-heading">
+
+                    <span class="heading-icon">
+                        ✎
+                    </span>
+
+                    <div>
+                        <h3>بيانات العملية</h3>
+
+                        <p>
+                            أدخل البيانات المطلوبة
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="receiverGroup"
+                    class="input-group">
+
+                    <label for="receiver">
+                        رقم المستلم
+                    </label>
+
+                    <input
+                        id="receiver"
+                        type="tel"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        placeholder="05XXXXXXXX">
+
+                </div>
+
+
+                <div
+                    id="amountGroup"
+                    class="input-group">
+
+                    <label for="amount">
+                        المبلغ
+                        <span>
+                            (بالشيكل)
+                        </span>
+                    </label>
+
+                    <input
+                        id="amount"
+                        type="number"
+                        inputmode="decimal"
+                        min="1"
+                        step="0.01"
+                        placeholder="مثال: 10 - 1000">
+
+                </div>
+
+
+                <div
+                    id="notesGroup"
+                    class="input-group">
+
+                    <label for="notes">
+                        الملاحظات
+                        <span>
+                            (اختياري)
+                        </span>
+                    </label>
+
+                    <textarea
+                        id="notes"
+                        rows="3"
+                        placeholder="تظهر في السجـل"></textarea>
+
+                </div>
+
+
+                <button
+                    id="createButton"
+                    class="main-button"
+                    type="button">
+
+                    إنشاء الكود وإكمال العملية
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+            </section>
+
+
+            <!-- النتيجة -->
+
+            <section
+                id="resultSection"
+                class="app-card result-card hidden">
+
+                <div class="result-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    الكود جاهز
+                </h3>
+
+                <p id="resultMessage">
+                </p>
+
+                <div
+                    id="ussdCode"
+                    class="ussd-code">
+                    -
+                </div>
+
+
+                <div class="result-buttons">
+
+                    <button
+                        id="copyButton"
+                        class="secondary-button"
+                        type="button">
+
+                        📋 نسخ الكود
+
+                    </button>
+
+
+                    <a
+                        id="callButton"
+                        class="call-button"
+                        href="#">
+
+                        ☎ تنفيذ التحويل
+
+                    </a>
+
+                </div>
+
+            </section>
+
         </section>
 
 
+        <!-- ==========================================
+             صفحة السجل
+        =========================================== -->
 
-        <!-- ==============================
-             حقوق المطور
-        =============================== -->
+        <section
+            id="historyPage"
+            class="page">
 
-        <section class="developer-card">
+            <div class="page-title">
 
+                <h2>سجل الحركات</h2>
 
-            <div class="developer-line"></div>
-
-
-            <div class="developer-icon">
-                ✦
-            </div>
-
-
-            <div class="developer-title">
-
-                صنع بواسطة أحمد عامر فرج الله
+                <p>
+                    محفوظ على هذا الجهاز فقط، دون إنترنت
+                </p>
 
             </div>
 
 
-            <div class="developer-subtitle">
+            <section class="app-card">
 
-                تطوير لفكرة أ. بكر السنكري
+                <div class="history-title">
 
-            </div>
+                    <div>
+
+                        <h3>
+                            العمليات السابقة
+                        </h3>
+
+                        <p>
+                            يمكنك فتح أي عملية لرؤية تفاصيلها
+                        </p>
+
+                    </div>
 
 
-            <div class="developer-line"></div>
+                    <button
+                        id="clearHistoryButton"
+                        class="clear-button"
+                        type="button">
 
+                        مسح السجل
+
+                    </button>
+
+                </div>
+
+
+                <div id="historyContainer">
+
+                    <div class="empty-history">
+
+                        <div class="empty-icon">
+                            ◷
+                        </div>
+
+                        <h3>
+                            لا توجد حركات بعد
+                        </h3>
+
+                        <p>
+                            ستظهر التحويلات هنا بعد إتمام الاتصال.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
 
         </section>
 
+
+        <!-- ==========================================
+             صفحة حول التطبيق
+        =========================================== -->
+
+        <section
+            id="aboutPage"
+            class="page">
+
+            <div class="page-title">
+
+                <h2>حول التطبيق</h2>
+
+                <p>
+                    الكود الوسيط — أداة بسيطة للتحويل الآمن
+                </p>
+
+            </div>
+
+
+            <!-- تثبيت التطبيق -->
+
+            <section class="app-card">
+
+                <div class="about-icon">
+                    ⇩
+                </div>
+
+                <h3>
+                    ثبّت التطبيق على هاتفك
+                </h3>
+
+                <p class="about-text">
+
+                    يمكنك تثبيت الكود الوسيط على هاتفك
+                    ليظهر كتطبيق مستقل على الشاشة الرئيسية
+                    ويعمل دون الحاجة إلى فتح المتصفح كل مرة.
+
+                </p>
+
+
+                <button
+                    id="installButton"
+                    class="main-button install-button"
+                    type="button">
+
+                    ⇩ خطوات التثبيت
+
+                </button>
+
+            </section>
+
+
+            <!-- تعريف -->
+
+            <section class="app-card">
+
+                <div class="about-icon">
+                    ♡
+                </div>
+
+                <h3>
+                    تطبيق الكود الوسيط
+                </h3>
+
+                <p class="about-text">
+
+                    تطبيق ويب بسيط وسهل الاستخدام، صُمم
+                    لتسهيل عمليات الدفع والتحويل الإلكتروني
+                    من خلال واجهة واحدة تجمع أهم خيارات
+                    التحويل بطريقة واضحة وسريعة.
+
+                </p>
+
+
+                <p class="about-text">
+
+                    يتيح التطبيق اختيار جهة التحويل مثل
+                    جوال بي، بال بي، وبنك فلسطين، ثم اختيار
+                    نوع العملية وإدخال البيانات المطلوبة،
+                    ليقوم التطبيق بإنشاء كود USSD المناسب
+                    وفتح شاشة الاتصال لإكمال العملية.
+
+                </p>
+
+
+                <p class="about-text">
+
+                    يعمل التطبيق بالكامل على جهازك، ويتم
+                    حفظ سجل الحركات محليًا على الهاتف،
+                    مما يسمح باستخدامه حتى عند عدم توفر
+                    اتصال بالإنترنت.
+
+                </p>
+
+            </section>
+
+
+            <!-- صدقة جارية -->
+
+            <section class="app-card special-card">
+
+                <div class="about-icon heart">
+                    ♥
+                </div>
+
+                <h3>
+                    صدقة جارية
+                </h3>
+
+                <p class="about-text">
+
+                    صدقة جارية عن روح شهداء عائلة فرج الله.
+
+                </p>
+
+                <p class="dua-text">
+
+                    نسأل الله أن يتقبل هذا العمل، وأن يجعل
+                    كل فائدة يحصل عليها مستخدم من هذا
+                    التطبيق في ميزان حسنات من أُهديت لهم
+                    هذه الصدقة.
+
+                </p>
+
+            </section>
+
+
+            <!-- المطور -->
+
+            <section class="developer-card">
+
+                <div class="developer-icon">
+                    ✦
+                </div>
+
+                <h3>
+                    صنع بواسطة
+                </h3>
+
+                <div class="developer-name">
+                    أحمد عامر فرج الله
+                </div>
+
+                <a
+                    class="developer-phone"
+                    href="tel:0598262172">
+
+                    0598262172 ☎
+
+                </a>
+
+            </section>
+
+
+            <!-- فكرة -->
+
+            <section class="idea-card">
+
+                <div class="about-icon">
+                    💡
+                </div>
+
+                <h3>
+                    تطوير لفكرة
+                </h3>
+
+                <p>
+                    أ. بكر السنكري
+                </p>
+
+            </section>
+
+
+            <div class="about-footer">
+
+               جميع الحقوق محفوظة
+                <strong>
+                   2026-2027
+                </strong>
+
+                <br>
+
+                <a href="غزة - فلسطين">
+                    غزة - فلسطيـن
+                </a>
+
+            </div>
+
+        </section>
 
     </main>
 
 
+    <!-- ==========================================
+         شريط التنقل السفلي
+    =========================================== -->
 
-    <!-- ==============================
-         أسفل الصفحة
-    =============================== -->
+    <nav class="bottom-nav">
 
-    <footer>
+        <button
+            class="nav-button active"
+            data-page="transferPage"
+            type="button">
 
-        تطبيق الكود الوسيط © 2026
+            <span class="nav-icon">
+                ⇄
+            </span>
 
-    </footer>
+            <span>
+                تحويل
+            </span>
+
+        </button>
 
 
+        <button
+            class="nav-button"
+            data-page="historyPage"
+            type="button">
 
-    <!-- ==============================
-         نافذة تأكيد العملية
-    =============================== -->
+            <span class="nav-icon">
+                ◷
+            </span>
+
+            <span>
+                السجل
+            </span>
+
+        </button>
+
+
+        <button
+            class="nav-button"
+            data-page="aboutPage"
+            type="button">
+
+            <span class="nav-icon">
+                ⓘ
+            </span>
+
+            <span>
+                حول
+            </span>
+
+        </button>
+
+    </nav>
+
+
+    <!-- ==========================================
+         نافذة التأكيد
+    =========================================== -->
 
     <div
         id="confirmModal"
         class="confirm-modal hidden">
 
-
         <div class="confirm-overlay"></div>
 
-
         <div class="confirm-box">
-
 
             <div class="confirm-icon">
                 ⚠️
             </div>
 
-
             <h2>
                 تأكيد العملية
             </h2>
 
-
             <p class="confirm-text">
-
-                يرجى التأكد من بيانات العملية
-                قبل المتابعة.
-
+                يرجى التأكد من بيانات العملية قبل المتابعة.
             </p>
 
 
-            <div
-                class="confirm-details">
+            <div class="confirm-details">
 
-
-                <div
-                    class="history-detail-row">
+                <div class="history-detail-row">
 
                     <span>
                         الخدمة
@@ -486,7 +732,6 @@
                     </strong>
 
                 </div>
-
 
 
                 <div
@@ -504,7 +749,6 @@
                 </div>
 
 
-
                 <div
                     id="confirmReceiverRow"
                     class="history-detail-row">
@@ -518,7 +762,6 @@
                     </strong>
 
                 </div>
-
 
 
                 <div
@@ -535,13 +778,10 @@
 
                 </div>
 
-
             </div>
 
 
-
             <div class="confirm-buttons">
-
 
                 <button
                     id="confirmCallButton"
@@ -562,22 +802,124 @@
 
                 </button>
 
-
             </div>
-
 
         </div>
 
     </div>
 
 
+    <!-- ==========================================
+         نافذة تثبيت التطبيق
+    =========================================== -->
 
-    <!-- ==============================
-         JavaScript
-    =============================== -->
+    <div
+        id="installModal"
+        class="confirm-modal hidden">
+
+        <div class="confirm-overlay"></div>
+
+        <div class="confirm-box install-box">
+
+            <button
+                id="closeInstallButton"
+                class="modal-close"
+                type="button">
+
+                ×
+
+            </button>
+
+            <div class="confirm-icon">
+                📱
+            </div>
+
+            <h2>
+                تثبيت الكود الوسيط
+            </h2>
+
+            <p class="confirm-text">
+
+                ثبّت التطبيق على الشاشة الرئيسية للوصول
+                إليه بسهولة والعمل دون الحاجة إلى فتح
+                المتصفح كل مرة.
+
+            </p>
+
+
+            <div class="install-steps">
+
+                <div class="install-step">
+
+                    <b>1</b>
+
+                    <span>
+                        على أندرويد اضغط زر التثبيت إذا ظهر لك.
+                    </span>
+
+                </div>
+
+
+                <div class="install-step">
+
+                    <b>2</b>
+
+                    <span>
+                        على الآيفون افتح الموقع من Safari.
+                    </span>
+
+                </div>
+
+
+                <div class="install-step">
+
+                    <b>3</b>
+
+                    <span>
+                        اضغط زر المشاركة أسفل الشاشة.
+                    </span>
+
+                </div>
+
+
+                <div class="install-step">
+
+                    <b>4</b>
+
+                    <span>
+                        اختر «إضافة إلى الشاشة الرئيسية».
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="nativeInstallButton"
+                class="main-button hidden"
+                type="button">
+
+                ⇩ تثبيت التطبيق الآن
+
+            </button>
+
+
+            <button
+                id="closeInstallButton2"
+                class="secondary-button full-button"
+                type="button">
+
+                فهمت
+
+            </button>
+
+        </div>
+
+    </div>
+
 
     <script src="script.js"></script>
-
 
 </body>
 
